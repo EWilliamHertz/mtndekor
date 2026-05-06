@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTN DEKOR | Admin Panel</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .admin-layout { padding: 4rem 5%; max-width: 1200px; margin: 0 auto; }
+        .admin-section { background-color: var(--bg-card); padding: 2rem; border-radius: 8px; border: 1px solid #333; margin-bottom: 3rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #333; }
+        th { color: var(--accent-primary); }
+        .status-btn { background-color: #28a745; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 4px; }
+        .delete-btn { background-color: #dc3545; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 4px; }
+        .support-box { background-color: rgba(212, 175, 55, 0.1); border-left: 4px solid var(--accent-primary); padding: 1.5rem; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><h2>ADMIN PANEL</h2></div>
+        <nav><ul><li><a href="/">Tillbaka till hemsidan</a></li></ul></nav>
+    </header>
+
+    <main class="admin-layout">
+        <section class="admin-section">
+            <h2 style="color:var(--accent-primary);">Inkomna Beställningar (Swish)</h2>
+            <table>
+                <thead>
+                    <tr><th>Produkt/Tjänst</th><th>Telefonnummer</th><th>Datum</th><th>Status</th><th>Åtgärd</th></tr>
+                </thead>
+                <tbody id="orders-table-body"></tbody>
+            </table>
+        </section>
+
+        <section class="admin-section">
+            <h2 style="color:var(--accent-primary);">Hantera Butik (Produkter)</h2>
+            <p>Lägg till nya produkter i webbshoppen.</p>
+            <div class="contact-form" style="margin-top: 1rem; margin-bottom: 2rem;">
+                <div class="form-group">
+                    <label>Produktnamn</label>
+                    <input type="text" id="prod-name" placeholder="T.ex. 480 slots Top-loader binder">
+                </div>
+                <div class="form-group">
+                    <label>Pris (kr)</label>
+                    <input type="number" id="prod-price" placeholder="T.ex. 360">
+                </div>
+                <div class="form-group">
+                    <label>Bildlänk (URL)</label>
+                    <input type="text" id="prod-img" placeholder="https://länk-till-bild.jpg">
+                </div>
+                <button id="add-product-btn" class="btn">Lägg till i butik</button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr><th>Produkt</th><th>Pris</th><th>Åtgärd</th></tr>
+                </thead>
+                <tbody id="products-table-body"></tbody>
+            </table>
+        </section>
+
+        <section class="admin-section">
+            <h2 style="color:var(--accent-primary);">Lägg till Genomfört Projekt</h2>
+            <div class="contact-form" style="margin-top: 1rem;">
+                <div class="form-group">
+                    <label>Projektbild (URL)</label>
+                    <input type="text" id="project-img" placeholder="https://exempel.se/bild1.jpg">
+                </div>
+                <button id="add-project-btn" class="btn">Spara Projekt</button>
+            </div>
+        </section>
+
+        <section class="admin-section">
+            <h2 style="color:var(--accent-primary);">Assistans?</h2>
+            <div class="support-box">
+                <p>Behöver du hjälp med systemet, webbplatsen eller har du stött på ett problem?</p>
+                <p style="margin-top: 0.5rem; font-size: 1.1rem;">
+                    Du kan alltid nå William på <strong>010 473 41 97</strong>. <br>
+                    Ring numret och fråga bara efter William så löser vi det lugnt och tryggt.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // --- Orders ---
+        async function loadOrders() {
+            const res = await fetch('/api/orders');
+            if(!res.ok) return;
+            const orders = await res.json();
+            const tbody = document.getElementById('orders-table-body');
+            tbody.innerHTML = '';
+            orders.forEach(o => {
+                tbody.innerHTML += `<tr>
+                    <td>${o.service_name}</td><td>${o.customer_phone}</td>
+                    <td>${new Date(o.created_at).toLocaleDateString('sv-SE')}</td>
+                    <td><strong>${o.status}</strong></td>
+                    <td>${o.status !== 'Betald' ? `<button class="status-btn" onclick="markPaid(${o.id})">Markera Betald</button>` : 'Klar'}</td>
+                </tr>`;
+            });
+        }
+        async function markPaid(id) {
+            await fetch('/api/orders', { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id, status:'Betald'}) });
+            loadOrders();
+        }
+
+        // --- Products ---
+        async function loadProducts() {
+            const res = await fetch('/api/products');
+            if(!res.ok) return;
+            const prods = await res.json();
+            const tbody = document.getElementById('products-table-body');
+            tbody.innerHTML = '';
+            prods.forEach(p => {
+                tbody.innerHTML += `<tr>
+                    <td>${p.name}</td><td>${p.price} kr</td>
+                    <td><button class="delete-btn" onclick="deleteProduct(${p.id})">Ta bort</button></td>
+                </tr>`;
+            });
+        }
+        document.getElementById('add-product-btn').addEventListener('click', async () => {
+            const name = document.getElementById('prod-name').value;
+            const price = document.getElementById('prod-price').value;
+            const img = document.getElementById('prod-img').value;
+            if(!name || !price) return alert('Namn och pris krävs.');
+            await fetch('/api/products', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({name, price, image_url: img}) });
+            document.getElementById('prod-name').value = '';
+            document.getElementById('prod-price').value = '';
+            document.getElementById('prod-img').value = '';
+            loadProducts();
+        });
+        async function deleteProduct(id) {
+            if(confirm('Är du säker?')) {
+                await fetch('/api/products', { method: 'DELETE', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id}) });
+                loadProducts();
+            }
+        }
+
+        // Init
+        loadOrders();
+        loadProducts();
+    </script>
+</body>
+</html>
