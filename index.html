@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MTN DEKOR - Specialister inom Fordonsdesign och Optimeringstjänster. Vi erbjuder stenskottsfilm, solfilm, motoroptimering och foliering i Olofström, Sverige.">
+    <title>MTN DEKOR | Fordonsdesign & Optimeringstjänster</title>
+    <style>
+        /* Base Variables & Reset */
+        :root {
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
+            --text-light: #f5f5f5;
+            --text-muted: #b0b0b0;
+            --accent-primary: #d4af37; /* Premium Gold to complement craftsmanship */
+            --accent-hover: #b5952f;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        h2.section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin: 4rem 0 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Header & Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: rgba(0, 0, 0, 0.9);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+
+        .logo img {
+            height: 70px;
+            width: auto;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 1rem;
+            background: linear-gradient(rgba(18, 18, 18, 0.8), rgba(18, 18, 18, 0.9)), 
+                        url('https://static.wixstatic.com/media/f3e2b9_32110f5a7012419ab409d56c7a1eeff9~mv2.jpg/v1/fill/w_1920,h_1080,q_90/bg.jpg') center/cover no-repeat;
+            min-height: 70vh;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            letter-spacing: 1px;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 800px;
+        }
+
+        .btn {
+            background-color: var(--accent-primary);
+            color: #000;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background-color: var(--bg-card);
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #333;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+        }
+
+        .service-card h3 {
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+        }
+
+        .service-card ul {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .service-card ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Portfolio Section */
+        .portfolio-text {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            padding: 0 1rem;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            padding: 0 5%;
+        }
+
+        .gallery img {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background-color: #000;
+            padding: 4rem 5%;
+            margin-top: 5rem;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            color: var(--accent-primary);
+        }
+
+        .contact-info p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .social-links {
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            display: inline-block;
+            margin-right: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--accent-primary);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-form label {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--bg-dark);
+            border: 1px solid #333;
+            color: var(--text-light);
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: #050505;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 850px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header>
+        <div class="logo">
+            <a href="#" aria-label="Hem">
+                <img src="https://static.wixstatic.com/media/f3e2b9_77b448bbf6024f3d95d6aa7b8bddfe30~mv2.png/v1/fill/w_880,h_660,fp_0.50_0.50,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f3e2b9_77b448bbf6024f3d95d6aa7b8bddfe30~mv2.png" alt="MTN DEKOR Logo">
+            </a>
+        </div>
+        <nav aria-label="Huvudnavigering">
+            <ul>
+                <li><a href="#tjanster">Tjänster</a></li>
+                <li><a href="#projekt">Projekt</a></li>
+                <li><a href="#kontakt">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>MTN DEKOR</h1>
+        <p>Specialister inom Fordonsdesign och Optimeringstjänster</p>
+        <a href="#kontakt" class="btn">Kontakta Oss Idag</a>
+    </section>
+
+    <!-- Services Section -->
+    <main>
+        <section id="tjanster">
+            <h2 class="section-title">Tjänster Vi Erbjuder</h2>
+            <div class="services-grid">
+                <!-- Service 1 -->
+                <div class="service-card">
+                    <h3>Stenskottsfilm</h3>
+                    <p>Ger ett komplett skydd för bilens lack mot stenskott, repor, UV-blekning och slitage. Till skillnad från keramiska behandlingar som kan vara ömtåliga, är filmen praktiskt taget osynlig och blockerar skador effektivt.</p>
+                    <ul>
+                        <li>Osynligt skydd</li>
+                        <li>Förhindrar rost och repor</li>
+                        <li>Ett starkt alternativ till keramiskt skydd</li>
+                        <li>Bibehåller fordonets skick</li>
+                    </ul>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="service-card">
+                    <h3>Solfilm</h3>
+                    <p>Ger UV-skydd, minskar värmen inuti bilen och ökar insynsskyddet. Bidrar till en behagligare körning och skyddar inredningen från att blekas.</p>
+                    <ul>
+                        <li>UV-skydd & minskad värme</li>
+                        <li>Ökat insynsskydd</li>
+                        <li>Skyddar interiören från blekning</li>
+                        <li>Behagligare och säkrare körupplevelse</li>
+                    </ul>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="service-card">
+                    <h3>Optimering</h3>
+                    <p>Motoroptimering för att förbättra fordonets prestanda och effektivitet. Varför vänta? Ge din bil den uppgradering den förtjänar!</p>
+                    <ul>
+                        <li>Märkbar ökning av hästkrafter och vridmoment</li>
+                        <li>Bättre bränsleekonomi</li>
+                        <li>Minskad miljöpåverkan via lägre utsläpp</li>
+                        <li>Skyddar din investering och ökar livslängden</li>
+                    </ul>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="service-card">
+                    <h3>Foliering</h3>
+                    <p>Vi är experter på foliering av bilar, lastbilar, båtar och andra fordon. Vi ser foliering som ett hantverk, inte bara marknadsföring, med fokus på precision och en lackliknande finish.</p>
+                    <ul>
+                        <li>Hel- och delfoliering</li>
+                        <li>Specialanpassade dekaler</li>
+                        <li>Lackliknande finish och detaljprecision</li>
+                        <li>För bilar, lastbilar och båtar</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="projekt">
+            <h2 class="section-title">Genomförda Projekt</h2>
+            <p class="portfolio-text">
+                "Vi är stolta över att kunna presentera ett urval av våra genomförda projekt. Varje arbete är unikt och reflekterar vår passion för design och detaljer. Vårt mål är att förvandla visioner till verklighet och skapa inspirerande utrymmen som våra kunder kan njuta av."
+            </p>
+            <div class="gallery">
+                <img src="https://static.wixstatic.com/media/f3e2b9_32110f5a7012419ab409d56c7a1eeff9~mv2.jpg/v1/fill/w_600,h_600,q_90/f3e2b9_32110f5a7012419ab409d56c7a1eeff9~mv2.jpg" alt="Projekt Exempel 1 - Svart fordon">
+                <img src="https://static.wixstatic.com/media/f3e2b9_e339d2b8748e452e896159d568b86d0e~mv2.jpg/v1/fill/w_600,h_600,q_90/f3e2b9_e339d2b8748e452e896159d568b86d0e~mv2.jpg" alt="Projekt Exempel 2 - Detaljarbete på fordon">
+            </div>
+        </section>
+    </main>
+
+    <!-- Contact Section -->
+    <section id="kontakt" class="contact-section">
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Kontakta Oss</h3>
+                <p><strong>Besöksadress:</strong><br> Bladvägen 17<br> 293 42 Olofström/Blekinge, Sverige</p>
+                <p><strong>Telefon:</strong><br> <a href="tel:0720189160">0720 189 160</a></p>
+                <p><strong>E-post:</strong><br> <a href="mailto:Mtn_dekor@hotmail.com">Mtn_dekor@hotmail.com</a></p>
+                
+                <div class="social-links">
+                    <a href="https://www.facebook.com/p/Mtn-Dekor-61555332775951/?locale=sv_SE" target="_blank" rel="noopener noreferrer">Facebook</a>
+                    <a href="https://www.instagram.com/mtn.dekor/" target="_blank" rel="noopener noreferrer">Instagram</a>
+                </div>
+            </div>
+
+            <div class="contact-form-container">
+                <form class="contact-form" action="#" method="POST">
+                    <div class="form-group">
+                        <label for="fornamn">Förnamn</label>
+                        <input type="text" id="fornamn" name="fornamn" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="efternamn">Efternamn</label>
+                        <input type="text" id="efternamn" name="efternamn" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="epost">E-post</label>
+                        <input type="email" id="epost" name="epost" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="meddelande">Meddelande</label>
+                        <textarea id="meddelande" name="meddelande" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">Skicka Meddelande</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 MTN DEKOR. Alla rättigheter förbehållna.</p>
+    </footer>
+
+</body>
+</html>
