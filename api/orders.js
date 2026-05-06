@@ -5,6 +5,22 @@ const pool = new Pool({
 });
 
 export default async function handler(req, res) {
+    // 1. SKAPA TABELLEN OM DEN INTE FINNS
+    try {
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS orders (
+                id SERIAL PRIMARY KEY,
+                service_name VARCHAR(255) NOT NULL,
+                customer_phone VARCHAR(50) NOT NULL,
+                status VARCHAR(50) DEFAULT 'Väntar på bekräftelse',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `);
+    } catch (err) {
+        console.error("Kunde inte skapa orders-tabellen:", err);
+    }
+
+    // 2. HANTERA ANROP
     // POST: Create a new order (from the Swish modal)
     if (req.method === 'POST') {
         const { service_name, customer_phone } = req.body;
