@@ -98,19 +98,30 @@
         </section>
 
         <section class="admin-section">
-            <h2 style="color:var(--accent-primary);">Lägg till Genomfört Projekt</h2>
-            <p>Välj före- och efterbilder direkt från din telefon eller dator.</p>
-            <div class="contact-form" style="margin-top: 1rem;">
-                <div class="form-group">
-                    <label>Före-bild</label>
+            <h2 style="color:var(--accent-primary);">Genomförda Projekt</h2>
+            <p>Lägg till, redigera eller ta bort före- och efterbilder.</p>
+            
+            <div class="contact-form" style="margin-top: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #333; padding-bottom: 2rem;">
+                <h3>Lägg till nytt projekt</h3>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>Före-bild (Välj från enhet)</label>
                     <input type="file" id="before-file" accept="image/*" style="padding: 0.5rem; background: transparent; border: none;">
                 </div>
                 <div class="form-group">
-                    <label>Efter-bild</label>
+                    <label>Efter-bild (Välj från enhet)</label>
                     <input type="file" id="after-file" accept="image/*" style="padding: 0.5rem; background: transparent; border: none;">
                 </div>
-                <button id="add-project-btn" class="btn">Spara Projekt</button>
+                <button id="add-project-btn" class="btn">Ladda upp och Spara</button>
                 <div id="proj-loading" class="loading">Laddar upp bilder och sparar... Vänligen vänta.</div>
+            </div>
+
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr><th>Före-bild</th><th>Efter-bild</th><th>Åtgärd</th></tr>
+                    </thead>
+                    <tbody id="projects-table-body"></tbody>
+                </table>
             </div>
         </section>
 
@@ -145,6 +156,7 @@
             document.getElementById('admin-content').style.display = 'block';
             loadOrders();
             loadProducts();
+            loadProjects(); // NYTT: Ladda projekten också!
         }
 
         // Kolla om redan inloggad när sidan laddas
@@ -297,7 +309,52 @@
             } finally {
                 loadingText.style.display = 'none';
             }
+            
+            loadProjects(); // Ladda om listan när man sparat
         });
+
+        // --- LADDA, REDIGERA OCH TA BORT PROJEKT ---
+        async function loadProjects() {
+            try {
+                const res = await fetch('/api/projects');
+                if(!res.ok) return;
+                const projects = await res.json();
+                const tbody = document.getElementById('projects-table-body');
+                tbody.innerHTML = '';
+                projects.forEach(p => {
+                    tbody.innerHTML += `<tr>
+                        <td><img src="${p.before_image_url}" style="width:70px; height:50px; object-fit:cover; border-radius:4px;"></td>
+                        <td><img src="${p.after_image_url}" style="width:70px; height:50px; object-fit:cover; border-radius:4px;"></td>
+                        <td>
+                            <button class="status-btn" style="margin-right: 0.5rem;" onclick="editProject(${p.id}, '${p.before_image_url}', '${p.after_image_url}')">Redigera</button>
+                            <button class="delete-btn" onclick="deleteProject(${p.id})">Ta bort</button>
+                        </td>
+                    </tr>`;
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        async function deleteProject(id) {
+            if(confirm('Är du säker på att du vill ta bort detta projekt?')) {
+                await fetch('/api/projects', { method: 'DELETE', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id}) });
+                loadProjects();
+            }
+        }
+
+        async function editProject(id, oldBefore, oldAfter) {
+            // Om klienten vill byta bilder manuellt med länkar
+            const newBefore = prompt('Ange ny FÖRE-bildlänk:', oldBefore);
+            if(newBefore === null) return; 
+            const newAfter = prompt('Ange ny EFTER-bildlänk:', oldAfter);
+            if(newAfter === null) return;
+
+            await fetch('/api/projects', { 
+                method: 'PUT', 
+                headers: {'Content-Type':'application/json'}, 
+                body: JSON.stringify({ id: id, before_image_url: newBefore, after_image_url: newAfter }) 
+            });
+            loadProjects();
+        }
 
     </script>
 </body>
