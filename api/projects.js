@@ -5,13 +5,15 @@ const pool = new Pool({
 });
 
 export default async function handler(req, res) {
-    // 1. SKAPA TABELLEN OM DEN INTE FINNS (Detta löser Vercel-problemet!)
+    // Uppdaterad tabell för att klara titel, beskrivning och flera bilder (JSONB)
     try {
         await pool.query(`
             CREATE TABLE IF NOT EXISTS projects (
                 id SERIAL PRIMARY KEY,
-                before_image_url TEXT,
-                after_image_url TEXT,
+                title VARCHAR(255) NOT NULL,
+                description TEXT,
+                main_image TEXT NOT NULL,
+                gallery JSONB DEFAULT '[]',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `);
@@ -19,9 +21,14 @@ export default async function handler(req, res) {
         console.error("Kunde inte skapa tabell:", err);
     }
 
-    // 2. HANTERA ANROP
     if (req.method === 'GET') {
+        const { id } = req.query;
         try {
+            if (id) {
+                // Hämta specifikt projekt
+                const result = await pool.query('SELECT * FROM projects WHERE id = $1', [id]);
+                return res.status(200).json(result.rows[0]);
+            }
             const result = await pool.query('SELECT * FROM projects ORDER BY created_at DESC');
             return res.status(200).json(result.rows);
         } catch (err) {
@@ -29,10 +36,13 @@ export default async function handler(req, res) {
         }
     } 
     else if (req.method === 'POST') {
-        const { before_image_url, after_image_url } = req.body;
+        const { title, description, main_image, gallery } = req.body;
         try {
-            await pool.query('INSERT INTO projects (before_image_url, after_image_url) VALUES ($1, $2)', [before_image_url, after_image_url]);
-            return res.status(201).json({ message: 'Projekt tillagt!' });
+            await pool.query(
+                'INSERT INTO projects (title, description, main_image, gallery) VALUES ($1, $2, $3, $4)', 
+                [title, description, main_image, JSON.stringify(gallery)]
+            );
+            return res.status(201).json({ message: 'Projekt skapat!' });
         } catch (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -41,21 +51,12 @@ export default async function handler(req, res) {
         const { id } = req.body;
         try {
             await pool.query('DELETE FROM projects WHERE id = $1', [id]);
-            return res.status(200).json({ message: 'Projekt borttaget' });
-        } catch (err) {
-            return res.status(500).json({ error: err.message });
-        }
-    }
-    else if (req.method === 'PUT') {
-        const { id, before_image_url, after_image_url } = req.body;
-        try {
-            await pool.query('UPDATE projects SET before_image_url = $1, after_image_url = $2 WHERE id = $3', [before_image_url, after_image_url, id]);
-            return res.status(200).json({ message: 'Projekt uppdaterat' });
+            return res.status(200).json({ message: 'Borttaget' });
         } catch (err) {
             return res.status(500).json({ error: err.message });
         }
     }
 
-    res.setHeader('Allow', ['GET', 'POST', 'DELETE', 'PUT']);
+    res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
     res.status(405).end(`Method ${req.method} Not Allowed`);
 }

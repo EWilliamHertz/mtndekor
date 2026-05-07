@@ -98,32 +98,28 @@
         </section>
 
         <section class="admin-section">
-            <h2 style="color:var(--accent-primary);">Genomförda Projekt</h2>
-            <p>Lägg till, redigera eller ta bort före- och efterbilder.</p>
-            
-            <div class="contact-form" style="margin-top: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #333; padding-bottom: 2rem;">
-                <h3>Lägg till nytt projekt</h3>
-                <div class="form-group" style="margin-top: 1rem;">
-                    <label>Före-bild (Välj från enhet)</label>
-                    <input type="file" id="before-file" accept="image/*" style="padding: 0.5rem; background: transparent; border: none;">
-                </div>
-                <div class="form-group">
-                    <label>Efter-bild (Välj från enhet)</label>
-                    <input type="file" id="after-file" accept="image/*" style="padding: 0.5rem; background: transparent; border: none;">
-                </div>
-                <button id="add-project-btn" class="btn">Ladda upp och Spara</button>
-                <div id="proj-loading" class="loading">Laddar upp bilder och sparar... Vänligen vänta.</div>
-            </div>
-
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead>
-                        <tr><th>Före-bild</th><th>Efter-bild</th><th>Åtgärd</th></tr>
-                    </thead>
-                    <tbody id="projects-table-body"></tbody>
-                </table>
-            </div>
-        </section>
+    <h2 style="color:var(--accent-primary);">Skapa Nytt Projekt</h2>
+    <div class="contact-form">
+        <div class="form-group">
+            <label>Titel</label>
+            <input type="text" id="proj-title" placeholder="T.ex. Hel-foliering Tesla Model 3">
+        </div>
+        <div class="form-group">
+            <label>Beskrivning (Information om vad du gjort)</label>
+            <textarea id="proj-desc" placeholder="Berätta om arbetet..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>Huvudbild (Den som syns på startsidan)</label>
+            <input type="file" id="proj-main-file" accept="image/*">
+        </div>
+        <div class="form-group">
+            <label>Galleri (Välj 5-10 bilder för detaljsidan)</label>
+            <input type="file" id="proj-gallery-files" accept="image/*" multiple>
+        </div>
+        <button id="save-project-btn" class="btn">Ladda upp och Spara</button>
+        <div id="proj-status" style="margin-top:1rem; display:none;">Laddar upp bilder... detta kan ta en stund.</div>
+    </div>
+</section>
 
         <section class="admin-section">
             <h2 style="color:var(--accent-primary);">Assistans?</h2>
@@ -274,44 +270,47 @@
         }
 
 
-        // --- 5. PROJEKT (FÖRE & EFTER) ---
-        document.getElementById('add-project-btn').addEventListener('click', async () => {
-            const beforeFile = document.getElementById('before-file');
-            const afterFile = document.getElementById('after-file');
-            const loadingText = document.getElementById('proj-loading');
+      document.getElementById('save-project-btn').addEventListener('click', async () => {
+    const title = document.getElementById('proj-title').value;
+    const desc = document.getElementById('proj-desc').value;
+    const mainFile = document.getElementById('proj-main-file').files[0];
+    const galleryFiles = document.getElementById('proj-gallery-files').files;
+    const status = document.getElementById('proj-status');
 
-            if (beforeFile.files.length === 0 || afterFile.files.length === 0) {
-                return alert('Vänligen välj både en före- och en efter-bild.');
-            }
+    if (!title || !mainFile) return alert("Titel och huvudbild krävs!");
 
-            loadingText.style.display = 'block';
+    status.style.display = "block";
+    try {
+        // 1. Ladda upp huvudbild
+        const mainImageUrl = await uploadImageToImgBB(mainFile);
 
-            try {
-                // Ladda upp båda bilderna samtidigt till ImgBB
-                const [beforeUrl, afterUrl] = await Promise.all([
-                    uploadImageToImgBB(beforeFile.files[0]),
-                    uploadImageToImgBB(afterFile.files[0])
-                ]);
+        // 2. Ladda upp galleri-bilder
+        const galleryUrls = [];
+        for (let file of galleryFiles) {
+            const url = await uploadImageToImgBB(file);
+            galleryUrls.push(url);
+        }
 
-                // Spara till databasen
-                await fetch('/api/projects', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ before_image_url: beforeUrl, after_image_url: afterUrl })
-                });
-
-                alert('Projekt sparat framgångsrikt!');
-                beforeFile.value = '';
-                afterFile.value = '';
-
-            } catch (err) {
-                alert('Något gick fel vid uppladdningen: ' + err.message);
-            } finally {
-                loadingText.style.display = 'none';
-            }
-            
-            loadProjects(); // Ladda om listan när man sparat
+        // 3. Spara till databas
+        await fetch('/api/projects', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                title,
+                description: desc,
+                main_image: mainImageUrl,
+                gallery: galleryUrls
+            })
         });
+
+        alert("Projekt sparat!");
+        location.reload();
+    } catch (err) {
+        alert("Något gick fel!");
+    } finally {
+        status.style.display = "none";
+    }
+});
 
         // --- LADDA, REDIGERA OCH TA BORT PROJEKT ---
         async function loadProjects() {

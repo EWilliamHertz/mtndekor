@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekt Detaljer | MTN DEKOR</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .project-detail-container { padding: 4rem 5%; max-width: 1000px; margin: 0 auto; }
+        .back-link { color: var(--accent-primary); text-decoration: none; display: block; margin-bottom: 2rem; }
+        .project-header h1 { font-size: 3rem; color: var(--accent-primary); margin-bottom: 1rem; }
+        .project-info { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 3rem; line-height: 1.8; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .gallery-grid img { width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: transform 0.3s; }
+        .gallery-grid img:hover { transform: scale(1.02); }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><img src="https://static.wixstatic.com/media/f3e2b9_77b448bbf6024f3d95d6aa7b8bddfe30~mv2.png" alt="Logo"></div>
+        <nav><ul><li><a href="/">Tillbaka Hem</a></li></ul></nav>
+    </header>
+
+    <main class="project-detail-container">
+        <a href="/" class="back-link">← Tillbaka till alla projekt</a>
+        <div id="project-content">Laddar projekt...</div>
+    </main>
+
+    <script>
+        async function loadProject() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectId = urlParams.get('id');
+            if (!projectId) return window.location.href = '/';
+
+            const res = await fetch(`/api/projects?id=${projectId}`);
+            const project = await res.json();
+
+            document.getElementById('project-content').innerHTML = `
+                <div class="project-header">
+                    <h1>${project.title}</h1>
+                </div>
+                <div class="project-info">${project.description}</div>
+                <div class="gallery-grid">
+                    ${project.gallery.map(img => `<img src="${img}" alt="Projektbild">`).join('')}
+                </div>
+            `;
+            document.title = `${project.title} | MTN DEKOR`;
+        }
+        loadProject();
+    </script>
+</body>
+</html>
