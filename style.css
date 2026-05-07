@@ -308,10 +308,10 @@ html {
     nav .nav-links {
         position: fixed;
         top: 0;
-        right: -100%;
+        right: -250px;
         height: 100vh;
-        width: 70%;
-        background-color: rgba(18, 18, 18, 0.98);
+        width: 250px;
+        background-color: rgba(15, 15, 15, 0.98);
         backdrop-filter: blur(10px);
         display: flex;
         flex-direction: column;
@@ -321,14 +321,25 @@ html {
         transition: right 0.4s ease;
         z-index: 1000;
         border-left: 1px solid #333;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+        padding: 0;
     }
 
     nav .nav-links.active {
         right: 0;
     }
 
+    nav .nav-links li {
+        width: 100%;
+        text-align: center;
+    }
+
     nav .nav-links li a {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
+        display: inline-block;
+        padding: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
     }
 
     /* Hamburger Animation */
@@ -342,13 +353,13 @@ html {
         transform: translateY(-8px) rotate(-45deg);
     }
 
-.hero h1 {
-                font-size: 2.5rem;
-            }
-            .contact-container {
-                grid-template-columns: 1fr;
-            }
-        }
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+}
 
         /* Swish Buttons & Modal Styles */
         .buy-btn {
