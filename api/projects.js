@@ -5,10 +5,9 @@ const pool = new Pool({
 });
 
 export default async function handler(req, res) {
-    // Uppdaterad tabell för att klara titel, beskrivning och flera bilder (JSONB)
     try {
         await pool.query(`
-            CREATE TABLE IF NOT EXISTS projects (
+            CREATE TABLE IF NOT EXISTS projects_v2 (
                 id SERIAL PRIMARY KEY,
                 title VARCHAR(255) NOT NULL,
                 description TEXT,
@@ -25,11 +24,10 @@ export default async function handler(req, res) {
         const { id } = req.query;
         try {
             if (id) {
-                // Hämta specifikt projekt
-                const result = await pool.query('SELECT * FROM projects WHERE id = $1', [id]);
+                const result = await pool.query('SELECT * FROM projects_v2 WHERE id = $1', [id]);
                 return res.status(200).json(result.rows[0]);
             }
-            const result = await pool.query('SELECT * FROM projects ORDER BY created_at DESC');
+            const result = await pool.query('SELECT * FROM projects_v2 ORDER BY created_at DESC');
             return res.status(200).json(result.rows);
         } catch (err) {
             return res.status(500).json({ error: err.message });
@@ -39,8 +37,8 @@ export default async function handler(req, res) {
         const { title, description, main_image, gallery } = req.body;
         try {
             await pool.query(
-                'INSERT INTO projects (title, description, main_image, gallery) VALUES ($1, $2, $3, $4)', 
-                [title, description, main_image, JSON.stringify(gallery)]
+                'INSERT INTO projects_v2 (title, description, main_image, gallery) VALUES ($1, $2, $3, $4)', 
+                [title, description, main_image, JSON.stringify(gallery || [])]
             );
             return res.status(201).json({ message: 'Projekt skapat!' });
         } catch (err) {
@@ -50,7 +48,7 @@ export default async function handler(req, res) {
     else if (req.method === 'DELETE') {
         const { id } = req.body;
         try {
-            await pool.query('DELETE FROM projects WHERE id = $1', [id]);
+            await pool.query('DELETE FROM projects_v2 WHERE id = $1', [id]);
             return res.status(200).json({ message: 'Borttaget' });
         } catch (err) {
             return res.status(500).json({ error: err.message });
@@ -59,7 +57,7 @@ export default async function handler(req, res) {
     else if (req.method === 'PUT') {
         const { id, title, description } = req.body;
         try {
-            await pool.query('UPDATE projects SET title = $1, description = $2 WHERE id = $3', [title, description, id]);
+            await pool.query('UPDATE projects_v2 SET title = $1, description = $2 WHERE id = $3', [title, description, id]);
             return res.status(200).json({ message: 'Projekt uppdaterat' });
         } catch (err) {
             return res.status(500).json({ error: err.message });

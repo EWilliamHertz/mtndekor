@@ -98,9 +98,11 @@
         </section>
 
         <section class="admin-section">
-    <h2 style="color:var(--accent-primary);">Skapa Nytt Projekt</h2>
-    <div class="contact-form">
-        <div class="form-group">
+    <h2 style="color:var(--accent-primary);">Hantera Projekt</h2>
+    
+    <div class="contact-form" style="margin-bottom: 2rem; border-bottom: 1px solid #333; padding-bottom: 2rem;">
+        <h3>Skapa Nytt Projekt</h3>
+        <div class="form-group" style="margin-top: 1rem;">
             <label>Titel</label>
             <input type="text" id="proj-title" placeholder="T.ex. Hel-foliering Tesla Model 3">
         </div>
@@ -118,6 +120,15 @@
         </div>
         <button id="save-project-btn" class="btn">Ladda upp och Spara</button>
         <div id="proj-status" style="margin-top:1rem; display:none;">Laddar upp bilder... detta kan ta en stund.</div>
+    </div>
+
+    <div style="overflow-x:auto;">
+        <table>
+            <thead>
+                <tr><th>Titel</th><th>Huvudbild</th><th>Åtgärd</th></tr>
+            </thead>
+            <tbody id="projects-table-body"></tbody>
+        </table>
     </div>
 </section>
 
@@ -340,10 +351,10 @@
 
         async function editProject(id, oldTitle, oldDesc) {
             const newTitle = prompt('Ändra titel:', oldTitle);
-            if (newTitle === null) return; // Avbryt
+            if (newTitle === null) return; 
 
             const newDesc = prompt('Ändra beskrivning:', oldDesc);
-            if (newDesc === null) return; // Avbryt
+            if (newDesc === null) return; 
 
             try {
                 await fetch('/api/projects', { 
@@ -351,7 +362,7 @@
                     headers: {'Content-Type':'application/json'}, 
                     body: JSON.stringify({ id: id, title: newTitle, description: newDesc }) 
                 });
-                loadProjects(); // Ladda om listan direkt
+                loadProjects(); 
             } catch (err) {
                 alert("Något gick fel vid uppdateringen.");
             }
@@ -365,33 +376,11 @@
                         headers: {'Content-Type':'application/json'}, 
                         body: JSON.stringify({id}) 
                     });
-                    loadProjects(); // Ladda om listan direkt
+                    loadProjects(); 
                 } catch (err) {
                     alert("Kunde inte ta bort projektet.");
                 }
             }
-        }
-
-        async function deleteProject(id) {
-            if(confirm('Är du säker på att du vill ta bort detta projekt?')) {
-                await fetch('/api/projects', { method: 'DELETE', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id}) });
-                loadProjects();
-            }
-        }
-
-        async function editProject(id, oldBefore, oldAfter) {
-            // Om klienten vill byta bilder manuellt med länkar
-            const newBefore = prompt('Ange ny FÖRE-bildlänk:', oldBefore);
-            if(newBefore === null) return; 
-            const newAfter = prompt('Ange ny EFTER-bildlänk:', oldAfter);
-            if(newAfter === null) return;
-
-            await fetch('/api/projects', { 
-                method: 'PUT', 
-                headers: {'Content-Type':'application/json'}, 
-                body: JSON.stringify({ id: id, before_image_url: newBefore, after_image_url: newAfter }) 
-            });
-            loadProjects();
         }
 
     </script>

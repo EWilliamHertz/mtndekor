@@ -97,10 +97,49 @@ function updateCartUI() {
     if (cartBadge) cartBadge.textContent = cart.length;
 }
 
-window.addToCart = function(name, price) {
+function flyToCart(buttonEl, imageUrl) {
+    const cartIcon = document.getElementById('open-cart-btn');
+    if (!cartIcon) return;
+
+    // Räkna ut var knappen och kundvagnsikonen är på skärmen
+    const btnRect = buttonEl.getBoundingClientRect();
+    const cartRect = cartIcon.getBoundingClientRect();
+
+    // Skapa en flygande kopia av bilden
+    const flyingImg = document.createElement('img');
+    flyingImg.src = imageUrl;
+    flyingImg.className = 'flying-img';
+    
+    // Startposition (Mitt på knappen)
+    flyingImg.style.width = '60px';
+    flyingImg.style.height = '60px';
+    flyingImg.style.left = `${btnRect.left + btnRect.width / 2 - 30}px`;
+    flyingImg.style.top = `${btnRect.top + btnRect.height / 2 - 30}px`;
+    
+    document.body.appendChild(flyingImg);
+
+    // Tvinga webbläsaren att registrera startpositionen innan vi flyttar den
+    void flyingImg.offsetWidth;
+
+    // Slutposition (In i kundvagnen)
+    flyingImg.style.left = `${cartRect.left + cartRect.width / 2 - 10}px`;
+    flyingImg.style.top = `${cartRect.top + cartRect.height / 2 - 10}px`;
+    flyingImg.style.width = '20px';
+    flyingImg.style.height = '20px';
+    flyingImg.style.opacity = '0.1';
+
+    // Ta bort bilden när animationen är klar och "studsa" kundvagnen
+    setTimeout(() => {
+        flyingImg.remove();
+        cartIcon.classList.add('cart-bounce');
+        setTimeout(() => cartIcon.classList.remove('cart-bounce'), 300);
+    }, 600);
+}
+
+window.addToCart = function(event, name, price, imageUrl) {
     cart.push({ name, price });
     updateCartUI();
-    toggleCart(); 
+    flyToCart(event.target, imageUrl);
 };
 
 window.removeFromCart = function(index) {
@@ -170,11 +209,13 @@ async function fetchProducts() {
         products.forEach(prod => {
             const card = document.createElement('div');
             card.className = 'service-card fade-in appear';
+            // Rensar namn ifall produkten innehåller ett citattecken (t.ex. "20' fälgar")
+            const safeName = prod.name ? prod.name.replace(/'/g, "\\'") : '';
             card.innerHTML = `
                 <img src="${prod.image_url}" alt="${prod.name}" style="width:100%; height:250px; object-fit:cover; border-radius:8px; margin-bottom:1rem;">
                 <h3>${prod.name}</h3>
                 <p style="font-size:1.4rem; color:var(--accent-primary); font-weight:bold; margin-bottom:1rem;">${prod.price} kr</p>
-                <button class="btn buy-btn" onclick="addToCart('${prod.name}', ${prod.price})">Lägg i varukorg</button>
+                <button class="btn buy-btn" onclick="addToCart(event, '${safeName}', ${prod.price}, '${prod.image_url}')">Lägg i varukorg</button>
             `;
             shopGrid.appendChild(card);
         });
