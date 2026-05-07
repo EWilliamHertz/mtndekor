@@ -1,33 +1,43 @@
-// --- Mobile Menu Logic ---
+// --- Mobilmeny Logik ---
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links');
-const links = document.querySelectorAll('.nav-links li a');
 
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navLinks.classList.toggle('active');
-});
+if (hamburger) {
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navLinks.classList.toggle('active');
+    });
+}
 
-// --- Tab Navigation Logic ---
+// --- Flik-navigering (Tabs) Logik ---
 const tabs = document.querySelectorAll('.nav-tab');
 const tabContents = document.querySelectorAll('.tab-content');
 
 tabs.forEach(tab => {
     tab.addEventListener('click', (e) => {
-        e.preventDefault(); // Stoppar sidan från att hoppa
+        const targetTab = tab.getAttribute('data-tab');
         
-        // Ta bort 'active' från alla flikar och innehåll
+        // Om det är en länk till en annan sida (som admin), hindra inte standardbeteendet
+        if (!targetTab) return;
+
+        e.preventDefault();
+        
+        // Ta bort aktiv status från alla flikar och sektioner
         tabs.forEach(t => t.classList.remove('active'));
         tabContents.forEach(c => c.classList.remove('active-tab'));
         
-        // Lägg till 'active' på den klickade fliken och dess innehåll
+        // Aktivera vald flik och sektion
         tab.classList.add('active');
-        const targetId = tab.getAttribute('data-tab');
-        document.getElementById(targetId).classList.add('active-tab');
+        const targetSection = document.getElementById(targetTab);
+        if (targetSection) {
+            targetSection.classList.add('active-tab');
+        }
 
-        // Stäng mobilmenyn automatiskt
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('active');
+        // Stäng mobilmenyn
+        if (hamburger) {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+        }
     });
 });
 
@@ -51,17 +61,17 @@ const checkoutBtn = document.getElementById('checkout-btn');
 let cart = [];
 let cartTotal = 0;
 
-// Öppna/Stäng Varukorg
 function toggleCart() {
-    cartSidebar.classList.toggle('open');
-    cartOverlay.classList.toggle('show');
+    if (cartSidebar) cartSidebar.classList.toggle('open');
+    if (cartOverlay) cartOverlay.classList.toggle('show');
 }
+
 if (openCartBtn) openCartBtn.addEventListener('click', toggleCart);
 if (closeCartBtn) closeCartBtn.addEventListener('click', toggleCart);
 if (cartOverlay) cartOverlay.addEventListener('click', toggleCart);
 
-// Uppdatera Varukorgens UI
 function updateCartUI() {
+    if (!cartItemsContainer) return;
     cartItemsContainer.innerHTML = '';
     cartTotal = 0;
 
@@ -83,30 +93,26 @@ function updateCartUI() {
         });
     }
 
-    cartTotalPrice.textContent = cartTotal;
-    cartBadge.textContent = cart.length;
+    if (cartTotalPrice) cartTotalPrice.textContent = cartTotal;
+    if (cartBadge) cartBadge.textContent = cart.length;
 }
 
-// Lägg till i Varukorg (Global funktion)
 window.addToCart = function(name, price) {
     cart.push({ name, price });
     updateCartUI();
-    toggleCart(); // Öppnar varukorgen automatiskt när man lägger till något
+    toggleCart(); 
 };
 
-// Ta bort från Varukorg (Global funktion)
 window.removeFromCart = function(index) {
     cart.splice(index, 1);
     updateCartUI();
 };
 
-// Gå till Kassan (Öppna Swish)
 if (checkoutBtn) {
     checkoutBtn.addEventListener('click', () => {
         if (cart.length === 0) return alert("Varukorgen är tom!");
-        
         serviceNameDisplay.textContent = cartTotal;
-        toggleCart(); // Stäng sidebar
+        toggleCart(); 
         modal.style.display = 'flex';
         successMsg.style.display = 'none';
         confirmBtn.style.display = 'block';
@@ -114,21 +120,16 @@ if (checkoutBtn) {
     });
 }
 
-// Stäng Swish Modal Logik
-if (closeBtn) {
-    closeBtn.addEventListener('click', () => modal.style.display = 'none');
-}
+if (closeBtn) closeBtn.addEventListener('click', () => modal.style.display = 'none');
 window.addEventListener('click', (e) => {
     if (e.target === modal) modal.style.display = 'none';
 });
 
-// Bekräfta Betalning (Skicka till databas)
 if (confirmBtn) {
     confirmBtn.addEventListener('click', async () => {
         const phone = phoneInput.value.trim();
-        if (!phone) return alert("Vänligen ange ditt telefonnummer så vi kan matcha betalningen.");
+        if (!phone) return alert("Vänligen ange ditt telefonnummer.");
 
-        // Skapa en textsträng av alla produkter i varukorgen
         const itemNames = cart.map(item => item.name).join(", ");
         const orderSummary = `Varukorg: ${itemNames} (Totalt: ${cartTotal}kr)`;
 
@@ -142,12 +143,11 @@ if (confirmBtn) {
             if (response.ok) {
                 confirmBtn.style.display = 'none';
                 successMsg.style.display = 'block';
-                // Töm varukorgen
                 cart = [];
                 updateCartUI();
                 setTimeout(() => { modal.style.display = 'none'; }, 3000);
             } else {
-                alert("Något gick fel. Försök igen.");
+                alert("Något gick fel.");
             }
         } catch (error) {
             alert("Kunde inte ansluta till servern.");
@@ -183,7 +183,7 @@ async function fetchProducts() {
     }
 }
 
-// --- Hämta och visa Projekt (Före & Efter) ---
+// --- Hämta och visa Projekt ---
 async function fetchProjects() {
     const projectGallery = document.getElementById('dynamic-project-gallery');
     if (!projectGallery) return;
@@ -197,14 +197,13 @@ async function fetchProjects() {
             const card = document.createElement('div');
             card.className = 'service-card fade-in appear';
             card.style.cursor = 'pointer';
-            // Gör hela kortet klickbart
             card.onclick = () => window.location.href = `/project.html?id=${proj.id}`;
             
             card.innerHTML = `
                 <img src="${proj.main_image}" alt="${proj.title}" style="width:100%; height:250px; object-fit:cover; border-radius:8px; margin-bottom:1rem;">
                 <h3 style="color:var(--accent-primary);">${proj.title}</h3>
-                <p style="color:var(--text-muted); font-size:0.9rem;">${proj.description.substring(0, 100)}...</p>
-                <p style="margin-top:1rem; font-weight:bold; font-size:0.8rem; text-transform:uppercase; letter-spacing:1px;">Läs mer och se bilder →</p>
+                <p style="color:var(--text-muted); font-size:0.9rem;">${proj.description ? proj.description.substring(0, 80) + '...' : ''}</p>
+                <p style="margin-top:1rem; font-weight:bold; font-size:0.8rem; text-transform:uppercase;">Läs mer →</p>
             `;
             projectGallery.appendChild(card);
         });
@@ -218,7 +217,6 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchProducts();
     fetchProjects();
     
-    // Scroll Animations
     const appearOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
     const appearOnScroll = new IntersectionObserver(function(entries, observer) {
         entries.forEach(entry => {
@@ -228,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, appearOptions);
 
-    const faders = document.querySelectorAll('.service-card, .gallery img, .section-title');
+    const faders = document.querySelectorAll('.service-card, .section-title');
     faders.forEach(fader => {
         fader.classList.add('fade-in');
         appearOnScroll.observe(fader);
