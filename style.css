@@ -411,3 +411,26 @@ html {
             font-size: 1.2rem;
             border-left: 5px solid #00A5DC; /* Swish blue */
         }
+
+        /* --- Flikar (Tabs) --- */
+        .tab-content {
+            display: none;
+            animation: fadeInTab 0.4s ease forwards;
+        }
+        .tab-content.active-tab {
+            display: block;
+        }
+        
+        @keyframes fadeInTab {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .nav-tab {
+            cursor: pointer;
+            padding-bottom: 5px;
+        }
+        .nav-tab.active {
+            color: var(--accent-primary);
+            border-bottom: 2px solid var(--accent-primary);
+        }

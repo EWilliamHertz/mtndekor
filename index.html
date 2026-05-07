@@ -16,27 +16,37 @@
             </a>
         </div>
         <nav aria-label="Huvudnavigering">
-            <ul class="nav-links">
-                <li><a href="#tjanster">Tjänster</a></li>
-                <li><a href="#projekt">Projekt</a></li>
-                <li><a href="#kontakt">Kontakt</a></li>
-            </ul>
-            <div class="hamburger">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-        </nav>
-    </header>
+            <ul class="nav-links">
+                <li><a href="#hem" class="nav-tab active" data-tab="hem">Hem</a></li>
+                <li><a href="#tjanster" class="nav-tab" data-tab="tjanster">Tjänster</a></li>
+                <li><a href="#butik" class="nav-tab" data-tab="butik">Butik</a></li>
+                <li><a href="#projekt" class="nav-tab" data-tab="projekt">Projekt</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
 
-    <section class="hero">
-        <h1>MTN DEKOR</h1>
-        <p>Specialister inom Fordonsdesign och Optimeringstjänster</p>
-        <a href="#kontakt" class="btn">Kontakta Oss Idag</a>
-    </section>
 
-    <main>
-        <section id="tjanster">
+
+
+    <main style="padding: 2rem 0;">
+        <section id="hem" class="tab-content active-tab">
+            <div class="hero" style="border-radius: 12px; margin: 0 5% 3rem 5%; min-height: 50vh;">
+                <h1>MTN DEKOR</h1>
+                <p>Specialister inom Fordonsdesign och Optimeringstjänster</p>
+            </div>
+            <div style="text-align: center; max-width: 800px; margin: 0 auto; padding: 0 1rem; margin-bottom: 4rem;">
+                <h2 style="color: var(--accent-primary); font-size: 2.5rem; margin-bottom: 1.5rem;">Välkommen till oss</h2>
+                <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 2rem;">
+                    Vi brinner för att förvandla och skydda ditt fordon med högsta precision. Oavsett om det gäller stenskottsfilm, solfilm, optimering eller foliering ser vi varje projekt som ett gediget hantverk.
+                </p>
+            </div>
+        </section>
+        <section id="tjanster" class="tab-content">
             <h2 class="section-title">Tjänster Vi Erbjuder</h2>
             <div class="services-grid">
                 <div class="service-card">
@@ -85,14 +95,14 @@
             </div>
         </section>
 
-        <section id="butik">
+        <section id="butik" class="tab-content">
             <h2 class="section-title">Vår Butik</h2>
             <p class="portfolio-text">Högkvalitativa tillbehör för fordon och samlare.</p>
             <div class="services-grid" id="dynamic-shop-grid">
                 </div>
         </section>
 
-        <section id="projekt">
+        <section id="projekt" class="tab-content">
             <h2 class="section-title">Genomförda Projekt</h2>
             <p class="portfolio-text">
                 "Vi är stolta över att kunna presentera ett urval av våra genomförda projekt. Varje arbete är unikt och reflekterar vår passion för design och detaljer."

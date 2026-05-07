@@ -8,8 +8,24 @@ hamburger.addEventListener('click', () => {
     navLinks.classList.toggle('active');
 });
 
-links.forEach(link => {
-    link.addEventListener('click', () => {
+// --- Tab Navigation Logic ---
+const tabs = document.querySelectorAll('.nav-tab');
+const tabContents = document.querySelectorAll('.tab-content');
+
+tabs.forEach(tab => {
+    tab.addEventListener('click', (e) => {
+        e.preventDefault(); // Stoppar sidan från att hoppa
+        
+        // Ta bort 'active' från alla flikar och innehåll
+        tabs.forEach(t => t.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active-tab'));
+        
+        // Lägg till 'active' på den klickade fliken och dess innehåll
+        tab.classList.add('active');
+        const targetId = tab.getAttribute('data-tab');
+        document.getElementById(targetId).classList.add('active-tab');
+
+        // Stäng mobilmenyn automatiskt
         hamburger.classList.remove('active');
         navLinks.classList.remove('active');
     });
