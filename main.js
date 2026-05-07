@@ -147,49 +147,36 @@ window.removeFromCart = function(index) {
     updateCartUI();
 };
 
+// --- Starta Stripe Checkout ---
 if (checkoutBtn) {
-    checkoutBtn.addEventListener('click', () => {
+    checkoutBtn.addEventListener('click', async () => {
         if (cart.length === 0) return alert("Varukorgen är tom!");
-        serviceNameDisplay.textContent = cartTotal;
-        toggleCart(); 
-        modal.style.display = 'flex';
-        successMsg.style.display = 'none';
-        confirmBtn.style.display = 'block';
-        phoneInput.value = '';
-    });
-}
 
-if (closeBtn) closeBtn.addEventListener('click', () => modal.style.display = 'none');
-window.addEventListener('click', (e) => {
-    if (e.target === modal) modal.style.display = 'none';
-});
-
-if (confirmBtn) {
-    confirmBtn.addEventListener('click', async () => {
-        const phone = phoneInput.value.trim();
-        if (!phone) return alert("Vänligen ange ditt telefonnummer.");
-
-        const itemNames = cart.map(item => item.name).join(", ");
-        const orderSummary = `Varukorg: ${itemNames} (Totalt: ${cartTotal}kr)`;
+        // Visuell feedback till kunden medan kassan laddas
+        checkoutBtn.textContent = 'Laddar säker kassa...';
+        checkoutBtn.disabled = true;
 
         try {
-            const response = await fetch('/api/orders', {
+            const response = await fetch('/api/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ service_name: orderSummary, customer_phone: phone })
+                body: JSON.stringify({ cartItems: cart })
             });
 
-            if (response.ok) {
-                confirmBtn.style.display = 'none';
-                successMsg.style.display = 'block';
-                cart = [];
-                updateCartUI();
-                setTimeout(() => { modal.style.display = 'none'; }, 3000);
+            const data = await response.json();
+
+            if (response.ok && data.url) {
+                // Skicka kunden till Stripes betalsida
+                window.location.href = data.url;
             } else {
-                alert("Något gick fel.");
+                alert("Kunde inte starta betalningen: " + (data.error || "Okänt fel"));
+                checkoutBtn.textContent = 'Gå till kassan (Stripe)';
+                checkoutBtn.disabled = false;
             }
         } catch (error) {
             alert("Kunde inte ansluta till servern.");
+            checkoutBtn.textContent = 'Gå till kassan (Stripe)';
+            checkoutBtn.disabled = false;
         }
     });
 }
@@ -255,6 +242,18 @@ async function fetchProjects() {
 
 // Kör vid sidladdning
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Kolla om kunden kommer tillbaka från Stripe ---
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('success')) {
+        alert("Tack för din beställning! Betalningen är genomförd.");
+        // Rensa adressfältet från ?success=true för att hålla det snyggt
+        window.history.replaceState(null, '', window.location.pathname);
+    }
+    if (urlParams.get('canceled')) {
+        alert("Betalningen avbröts. Din varukorg finns kvar om du vill försöka igen.");
+        window.history.replaceState(null, '', window.location.pathname);
+    }
+
     fetchProducts();
     fetchProjects();
     
