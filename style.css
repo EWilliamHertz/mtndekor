@@ -308,16 +308,16 @@ html {
     nav .nav-links {
         position: fixed;
         top: 0;
-        right: -180px; /* Drar in menyn ännu mer utanför skärmen */
+        right: -130px; /* Gömmer den helt utanför skärmen */
         height: 100vh;
-        width: 180px; /* Mycket smalare och snyggare bredd */
+        width: 130px; /* Ännu smalare, tar upp cirka 1/3 av en mobilskärm */
         background-color: rgba(15, 15, 15, 0.98);
         backdrop-filter: blur(10px);
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 1.2rem; /* För länkarna mycket närmare varandra */
+        gap: 1rem; /* Något tätare mellanrum */
         transition: right 0.3s ease;
         z-index: 1000;
         border-left: 1px solid #333;
@@ -335,11 +335,11 @@ html {
     }
 
     nav .nav-links li a {
-        font-size: 0.95rem; /* Krympt texten för en modernare känsla */
+        font-size: 0.85rem; /* Mindre text för att passa den smalare menyn */
         display: inline-block;
-        padding: 8px; /* Mindre utfyllnad runt texten */
+        padding: 6px;
         text-transform: uppercase;
-        letter-spacing: 1px; /* Tighter bokstavsmellanrum */
+        letter-spacing: 1px;
     }
 
     /* Hamburger Animation */
