@@ -273,3 +273,42 @@ document.addEventListener('DOMContentLoaded', () => {
         appearOnScroll.observe(fader);
     });
 });
+
+// --- Kontaktformulär Logik ---
+const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Hindrar sidan från att laddas om
+        
+        const fornamn = document.getElementById('fornamn').value;
+        const efternamn = document.getElementById('efternamn').value;
+        const epost = document.getElementById('epost').value;
+        const meddelande = document.getElementById('meddelande').value;
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+
+        // Ge kunden visuell feedback att något händer
+        submitBtn.textContent = 'Skickar...';
+        submitBtn.disabled = true;
+
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fornamn, efternamn, epost, meddelande })
+            });
+
+            if (res.ok) {
+                alert('Tack! Ditt meddelande har skickats till oss.');
+                contactForm.reset(); // Tömmer formuläret
+            } else {
+                alert('Något gick fel när meddelandet skulle skickas. Försök igen.');
+            }
+        } catch (err) {
+            alert('Kunde inte ansluta till servern.');
+        } finally {
+            // Återställ knappen
+            submitBtn.textContent = 'Skicka Meddelande';
+            submitBtn.disabled = false;
+        }
+    });
+}
