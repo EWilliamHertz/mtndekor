@@ -312,7 +312,7 @@
     }
 });
 
-        // --- LADDA, REDIGERA OCH TA BORT PROJEKT ---
+        // --- LADDA OCH TA BORT PROJEKT (Uppdaterad för ny struktur) ---
         async function loadProjects() {
             try {
                 const res = await fetch('/api/projects');
@@ -320,12 +320,12 @@
                 const projects = await res.json();
                 const tbody = document.getElementById('projects-table-body');
                 tbody.innerHTML = '';
+                
                 projects.forEach(p => {
                     tbody.innerHTML += `<tr>
-                        <td><img src="${p.before_image_url}" style="width:70px; height:50px; object-fit:cover; border-radius:4px;"></td>
-                        <td><img src="${p.after_image_url}" style="width:70px; height:50px; object-fit:cover; border-radius:4px;"></td>
+                        <td><strong>${p.title}</strong></td>
+                        <td><img src="${p.main_image}" style="width:70px; height:50px; object-fit:cover; border-radius:4px;"></td>
                         <td>
-                            <button class="status-btn" style="margin-right: 0.5rem;" onclick="editProject(${p.id}, '${p.before_image_url}', '${p.after_image_url}')">Redigera</button>
                             <button class="delete-btn" onclick="deleteProject(${p.id})">Ta bort</button>
                         </td>
                     </tr>`;
