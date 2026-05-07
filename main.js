@@ -31,16 +31,90 @@ tabs.forEach(tab => {
     });
 });
 
-// --- Modal & Global Variables ---
+// --- Kundvagn (Cart) & Modal Logik ---
 const modal = document.getElementById('swish-modal');
 const closeBtn = document.querySelector('.close-btn');
 const serviceNameDisplay = document.getElementById('selected-service-name');
 const confirmBtn = document.getElementById('confirm-payment-btn');
 const phoneInput = document.getElementById('customer-phone');
 const successMsg = document.getElementById('payment-success-msg');
-let currentSelectedService = "";
 
-// Stäng Modal Logik
+const openCartBtn = document.getElementById('open-cart-btn');
+const closeCartBtn = document.getElementById('close-cart-btn');
+const cartSidebar = document.getElementById('cart-sidebar');
+const cartOverlay = document.getElementById('cart-overlay');
+const cartItemsContainer = document.getElementById('cart-items');
+const cartTotalPrice = document.getElementById('cart-total-price');
+const cartBadge = document.getElementById('cart-badge');
+const checkoutBtn = document.getElementById('checkout-btn');
+
+let cart = [];
+let cartTotal = 0;
+
+// Öppna/Stäng Varukorg
+function toggleCart() {
+    cartSidebar.classList.toggle('open');
+    cartOverlay.classList.toggle('show');
+}
+if (openCartBtn) openCartBtn.addEventListener('click', toggleCart);
+if (closeCartBtn) closeCartBtn.addEventListener('click', toggleCart);
+if (cartOverlay) cartOverlay.addEventListener('click', toggleCart);
+
+// Uppdatera Varukorgens UI
+function updateCartUI() {
+    cartItemsContainer.innerHTML = '';
+    cartTotal = 0;
+
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p style="color:var(--text-muted);">Varukorgen är tom.</p>';
+    } else {
+        cart.forEach((item, index) => {
+            cartTotal += parseInt(item.price);
+            const itemEl = document.createElement('div');
+            itemEl.className = 'cart-item';
+            itemEl.innerHTML = `
+                <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <p>${item.price} kr</p>
+                </div>
+                <button class="remove-item-btn" onclick="removeFromCart(${index})">Ta bort</button>
+            `;
+            cartItemsContainer.appendChild(itemEl);
+        });
+    }
+
+    cartTotalPrice.textContent = cartTotal;
+    cartBadge.textContent = cart.length;
+}
+
+// Lägg till i Varukorg (Global funktion)
+window.addToCart = function(name, price) {
+    cart.push({ name, price });
+    updateCartUI();
+    toggleCart(); // Öppnar varukorgen automatiskt när man lägger till något
+};
+
+// Ta bort från Varukorg (Global funktion)
+window.removeFromCart = function(index) {
+    cart.splice(index, 1);
+    updateCartUI();
+};
+
+// Gå till Kassan (Öppna Swish)
+if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', () => {
+        if (cart.length === 0) return alert("Varukorgen är tom!");
+        
+        serviceNameDisplay.textContent = cartTotal;
+        toggleCart(); // Stäng sidebar
+        modal.style.display = 'flex';
+        successMsg.style.display = 'none';
+        confirmBtn.style.display = 'block';
+        phoneInput.value = '';
+    });
+}
+
+// Stäng Swish Modal Logik
 if (closeBtn) {
     closeBtn.addEventListener('click', () => modal.style.display = 'none');
 }
@@ -54,16 +128,23 @@ if (confirmBtn) {
         const phone = phoneInput.value.trim();
         if (!phone) return alert("Vänligen ange ditt telefonnummer så vi kan matcha betalningen.");
 
+        // Skapa en textsträng av alla produkter i varukorgen
+        const itemNames = cart.map(item => item.name).join(", ");
+        const orderSummary = `Varukorg: ${itemNames} (Totalt: ${cartTotal}kr)`;
+
         try {
             const response = await fetch('/api/orders', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ service_name: currentSelectedService, customer_phone: phone })
+                body: JSON.stringify({ service_name: orderSummary, customer_phone: phone })
             });
 
             if (response.ok) {
                 confirmBtn.style.display = 'none';
                 successMsg.style.display = 'block';
+                // Töm varukorgen
+                cart = [];
+                updateCartUI();
                 setTimeout(() => { modal.style.display = 'none'; }, 3000);
             } else {
                 alert("Något gick fel. Försök igen.");
@@ -93,21 +174,9 @@ async function fetchProducts() {
                 <img src="${prod.image_url}" alt="${prod.name}" style="width:100%; height:250px; object-fit:cover; border-radius:8px; margin-bottom:1rem;">
                 <h3>${prod.name}</h3>
                 <p style="font-size:1.4rem; color:var(--accent-primary); font-weight:bold; margin-bottom:1rem;">${prod.price} kr</p>
-                <button class="btn buy-btn" data-service="${prod.name}">Köp med Swish</button>
+                <button class="btn buy-btn" onclick="addToCart('${prod.name}', ${prod.price})">Lägg i varukorg</button>
             `;
             shopGrid.appendChild(card);
-        });
-
-        // Koppla klick-funktioner till de nya knapparna
-        document.querySelectorAll('.buy-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                currentSelectedService = e.target.getAttribute('data-service');
-                serviceNameDisplay.textContent = currentSelectedService;
-                modal.style.display = 'flex';
-                successMsg.style.display = 'none';
-                confirmBtn.style.display = 'block';
-                phoneInput.value = '';
-            });
         });
     } catch (err) {
         console.error("Kunde inte ladda produkter:", err);

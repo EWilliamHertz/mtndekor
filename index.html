@@ -15,18 +15,24 @@
                 <img src="https://static.wixstatic.com/media/f3e2b9_77b448bbf6024f3d95d6aa7b8bddfe30~mv2.png/v1/fill/w_880,h_660,fp_0.50_0.50,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f3e2b9_77b448bbf6024f3d95d6aa7b8bddfe30~mv2.png" alt="MTN DEKOR Logo">
             </a>
         </div>
-        <nav aria-label="Huvudnavigering">
-            <ul class="nav-links">
-                <li><a href="#hem" class="nav-tab active" data-tab="hem">Hem</a></li>
-                <li><a href="#tjanster" class="nav-tab" data-tab="tjanster">Tjänster</a></li>
-                <li><a href="#butik" class="nav-tab" data-tab="butik">Butik</a></li>
-                <li><a href="#projekt" class="nav-tab" data-tab="projekt">Projekt</a></li>
-</ul>
+<nav aria-label="Huvudnavigering" style="display: flex; align-items: center; gap: 2rem;">
+            <ul class="nav-links">
+                <li><a href="#tjanster">Tjänster</a></li>
+                <li><a href="#projekt">Projekt</a></li>
+                <li><a href="#kontakt">Kontakt</a></li>
+            </ul>
+            <div class="cart-icon-container" id="open-cart-btn" style="cursor: pointer; position: relative; margin-right: 1rem;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text-light)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span id="cart-badge" style="position: absolute; top: -8px; right: -8px; background: var(--accent-primary); color: #000; font-size: 0.75rem; font-weight: bold; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">0</span>
+            </div>
             <div class="hamburger">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
-                <span class="menu-text">Meny</span>
             </div>
         </nav>
     </header>
@@ -151,11 +157,24 @@
         </div>
     </section>
 
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h2>Din Varukorg</h2>
+            <span class="close-cart-btn" id="close-cart-btn">&times;</span>
+        </div>
+        <div class="cart-items" id="cart-items">
+            </div>
+        <div class="cart-footer">
+            <h3>Totalt: <span id="cart-total-price">0</span> kr</h3>
+            <button id="checkout-btn" class="btn swish-btn" style="width: 100%; margin-top: 1rem;">Gå till kassan (Swish)</button>
+        </div>
+    </div>
+
     <div id="swish-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <h2>Betala med Swish</h2>
-            <p>Du har valt: <strong id="selected-service-name"></strong></p>
+            <p>Att betala: <strong id="selected-service-name"></strong> kr</p>
             <div class="swish-instructions">
                 <p>1. Öppna Swish-appen.</p>
                 <p>2. Swisha till nummer: <strong>123 186 10 20</strong></p>
@@ -168,6 +187,8 @@
             <p id="payment-success-msg" style="display:none; color:#4CAF50; margin-top:1rem;">Tack! Din beställning är mottagen och granskas nu av vår personal.</p>
         </div>
     </div>
+
+    <div id="cart-overlay" class="cart-overlay"></div>
 
     <footer>
         <p>&copy; 2026 MTN DEKOR. Alla rättigheter förbehållna. | <a href="/admin.html" style="color:var(--text-muted); text-decoration:underline;">Admin Login</a></p>
