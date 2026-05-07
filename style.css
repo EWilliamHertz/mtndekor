@@ -285,19 +285,38 @@ html {
 
 /* Hamburger Menu Styles */
 .hamburger {
-    display: none;
-    cursor: pointer;
-    flex-direction: column;
-    gap: 5px;
-    z-index: 1001;
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    align-items: center; /* Centrerar strecken och texten */
+    gap: 5px;
+    z-index: 1001;
 }
 
+
+
+
 .hamburger .bar {
-    width: 25px;
-    height: 3px;
-    background-color: var(--text-light);
-    transition: all 0.3s ease;
+    width: 25px;
+    height: 3px;
+    background-color: var(--text-light);
+    transition: all 0.3s ease;
 }
+
+
+
+
+.hamburger .menu-text {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-light);
+    margin-top: -2px; /* Drar upp texten lite närmare strecken */
+    transition: opacity 0.3s ease;
+}
+
+
+
 
 /* Responsive Design */
 @media (max-width: 850px) {
@@ -351,6 +370,9 @@ html {
     }
     .hamburger.active .bar:nth-child(3) {
         transform: translateY(-8px) rotate(-45deg);
+    }
+    .hamburger.active .menu-text {
+        opacity: 0; /* Gömmer texten när menyn blir ett X */
     }
 
     .hero h1 {
