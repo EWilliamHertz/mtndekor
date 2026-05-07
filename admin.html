@@ -312,7 +312,7 @@
     }
 });
 
-        // --- LADDA OCH TA BORT PROJEKT (Uppdaterad för ny struktur) ---
+        // --- LADDA, REDIGERA OCH TA BORT PROJEKT ---
         async function loadProjects() {
             try {
                 const res = await fetch('/api/projects');
@@ -322,15 +322,54 @@
                 tbody.innerHTML = '';
                 
                 projects.forEach(p => {
+                    // Säkra texterna så eventuella citattecken inte bryter koden
+                    const safeTitle = p.title ? p.title.replace(/'/g, "\\'") : '';
+                    const safeDesc = p.description ? p.description.replace(/'/g, "\\'") : '';
+                    
                     tbody.innerHTML += `<tr>
                         <td><strong>${p.title}</strong></td>
                         <td><img src="${p.main_image}" style="width:70px; height:50px; object-fit:cover; border-radius:4px;"></td>
                         <td>
+                            <button class="status-btn" style="margin-right: 0.5rem;" onclick="editProject(${p.id}, '${safeTitle}', '${safeDesc}')">Redigera</button>
                             <button class="delete-btn" onclick="deleteProject(${p.id})">Ta bort</button>
                         </td>
                     </tr>`;
                 });
             } catch (err) { console.error(err); }
+        }
+
+        async function editProject(id, oldTitle, oldDesc) {
+            const newTitle = prompt('Ändra titel:', oldTitle);
+            if (newTitle === null) return; // Avbryt
+
+            const newDesc = prompt('Ändra beskrivning:', oldDesc);
+            if (newDesc === null) return; // Avbryt
+
+            try {
+                await fetch('/api/projects', { 
+                    method: 'PUT', 
+                    headers: {'Content-Type':'application/json'}, 
+                    body: JSON.stringify({ id: id, title: newTitle, description: newDesc }) 
+                });
+                loadProjects(); // Ladda om listan direkt
+            } catch (err) {
+                alert("Något gick fel vid uppdateringen.");
+            }
+        }
+
+        async function deleteProject(id) {
+            if(confirm('Är du säker på att du vill ta bort detta projekt permanent?')) {
+                try {
+                    await fetch('/api/projects', { 
+                        method: 'DELETE', 
+                        headers: {'Content-Type':'application/json'}, 
+                        body: JSON.stringify({id}) 
+                    });
+                    loadProjects(); // Ladda om listan direkt
+                } catch (err) {
+                    alert("Kunde inte ta bort projektet.");
+                }
+            }
         }
 
         async function deleteProject(id) {

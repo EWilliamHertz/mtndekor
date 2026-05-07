@@ -56,7 +56,16 @@ export default async function handler(req, res) {
             return res.status(500).json({ error: err.message });
         }
     }
+    else if (req.method === 'PUT') {
+        const { id, title, description } = req.body;
+        try {
+            await pool.query('UPDATE projects SET title = $1, description = $2 WHERE id = $3', [title, description, id]);
+            return res.status(200).json({ message: 'Projekt uppdaterat' });
+        } catch (err) {
+            return res.status(500).json({ error: err.message });
+        }
+    }
 
-    res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
+    res.setHeader('Allow', ['GET', 'POST', 'DELETE', 'PUT']);
     res.status(405).end(`Method ${req.method} Not Allowed`);
 }
