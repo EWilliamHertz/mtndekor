@@ -268,6 +268,35 @@ async function fetchProjects() {
 }
 
 // ============================================================
+// OMDÖMEN (TESTIMONIALS)
+// ============================================================
+async function fetchTestimonials() {
+    const section = document.getElementById('testimonials-section');
+    const grid    = document.getElementById('testimonials-grid');
+    if (!section || !grid) return;
+    try {
+        const res = await fetch('/api/testimonials');
+        if (!res.ok) return;
+        const testimonials = await res.json();
+        if (testimonials.length === 0) return; // Hide section if no testimonials
+        grid.innerHTML = '';
+        testimonials.forEach(t => {
+            const stars = '★'.repeat(Math.min(5, Math.max(1, t.rating))) +
+                          '☆'.repeat(5 - Math.min(5, Math.max(1, t.rating)));
+            const card = document.createElement('div');
+            card.className = 'testimonial-card fade-in appear';
+            card.innerHTML = `
+                <div class="testimonial-stars">${stars}</div>
+                <p class="testimonial-text">"${t.text}"</p>
+                <p class="testimonial-author">— ${t.author}</p>
+            `;
+            grid.appendChild(card);
+        });
+        section.style.display = 'block';
+    } catch (err) { console.error('Kunde inte ladda omdömen:', err); }
+}
+
+// ============================================================
 // HERO BILDSPEL
 // ============================================================
 async function fetchHeroSlides() {
@@ -345,6 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchHeroSlides();
     fetchProducts();
     fetchProjects();
+    fetchTestimonials();
 
     // Run animations
     triggerVisibleAnimations();

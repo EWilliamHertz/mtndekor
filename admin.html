@@ -55,6 +55,37 @@
         </section>
 
         <section class="admin-section">
+            <h2 style="color:var(--accent-primary);">Hantera Omdömen (Recensioner)</h2>
+            <div class="contact-form" style="margin-top: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #333; padding-bottom: 2rem;">
+                <div class="form-group">
+                    <label>Kundens namn</label>
+                    <input type="text" id="test-author" placeholder="T.ex. Anna S.">
+                </div>
+                <div class="form-group">
+                    <label>Betyg (1–5 stjärnor)</label>
+                    <select id="test-rating" style="padding:0.75rem; background:var(--bg-dark); border:1px solid #444; color:white; border-radius:4px; width:100%;">
+                        <option value="5">★★★★★ (5)</option>
+                        <option value="4">★★★★☆ (4)</option>
+                        <option value="3">★★★☆☆ (3)</option>
+                        <option value="2">★★☆☆☆ (2)</option>
+                        <option value="1">★☆☆☆☆ (1)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Omdömestext</label>
+                    <textarea id="test-text" placeholder="Vad säger kunden om er?" style="height:100px;"></textarea>
+                </div>
+                <button id="add-testimonial-btn" class="btn">Lägg till omdöme</button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead><tr><th>Kund</th><th>Betyg</th><th>Text</th><th>Åtgärd</th></tr></thead>
+                    <tbody id="testimonials-table-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="admin-section">
             <h2 style="color:var(--accent-primary);">Hantera Fraktklasser (Vikt)</h2>
             <p>Ange intervall för hur mycket korgen ska kosta att skicka beroende på totalvikt.</p>
             <div class="contact-form" style="margin-top: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #333; padding-bottom: 2rem;">
@@ -184,7 +215,8 @@
             loadProjects();
             loadHeroSlides();
             loadPages();
-            loadShippingRates(); // Ladda frakten
+            loadShippingRates();
+            loadTestimonials();
         }
 
         if (sessionStorage.getItem('admin_logged_in') === 'true') showAdminPanel();
@@ -210,6 +242,59 @@
                 };
                 reader.onerror = () => reject(new Error("File error"));
             });
+        }
+
+        // --- OMDÖMEN ---
+        async function loadTestimonials() {
+            const res = await fetch('/api/testimonials');
+            const testimonials = await res.json();
+            const tbody = document.getElementById('testimonials-table-body');
+            tbody.innerHTML = '';
+            if (testimonials.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="color:#888;">Inga omdömen ännu.</td></tr>';
+                return;
+            }
+            testimonials.forEach(t => {
+                const stars = '★'.repeat(t.rating) + '☆'.repeat(5 - t.rating);
+                const shortText = t.text.length > 60 ? t.text.substring(0, 60) + '…' : t.text;
+                tbody.innerHTML += `<tr>
+                    <td><strong>${t.author}</strong></td>
+                    <td style="color:var(--accent-primary);">${stars}</td>
+                    <td style="color:#aaa;">${shortText}</td>
+                    <td><button class="delete-btn" onclick="deleteTestimonial(${t.id})">Ta bort</button></td>
+                </tr>`;
+            });
+        }
+
+        document.getElementById('add-testimonial-btn').addEventListener('click', async () => {
+            const author = document.getElementById('test-author').value.trim();
+            const rating = parseInt(document.getElementById('test-rating').value);
+            const text   = document.getElementById('test-text').value.trim();
+            if (!author || !text) return alert('Namn och text krävs.');
+            const res = await fetch('/api/testimonials', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ author, rating, text })
+            });
+            if (res.ok) {
+                document.getElementById('test-author').value = '';
+                document.getElementById('test-text').value = '';
+                document.getElementById('test-rating').value = '5';
+                loadTestimonials();
+            } else {
+                alert('Något gick fel.');
+            }
+        });
+
+        async function deleteTestimonial(id) {
+            if (confirm('Ta bort detta omdöme?')) {
+                await fetch('/api/testimonials', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
+                });
+                loadTestimonials();
+            }
         }
 
         // --- FRAKTKLASSER ---
