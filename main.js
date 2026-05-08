@@ -56,6 +56,7 @@ function checkHashRoute() {
 
 // Lyssna på webbläsarens "Bakåt/Framåt"-knappar
 window.addEventListener('popstate', checkHashRoute);
+
 // --- Kundvagn & Frakt Logik ---
 const modal = document.getElementById('swish-modal');
 const closeBtn = document.querySelector('.close-btn');
@@ -227,7 +228,6 @@ async function fetchProducts() {
             const card = document.createElement('div');
             card.className = 'service-card fade-in appear';
             const safeName = prod.name ? prod.name.replace(/'/g, "\\'") : '';
-            // Vi skickar nu med vikten i addToCart!
             card.innerHTML = `
                 <img src="${prod.image_url}" alt="${prod.name}" loading="lazy" style="width:100%; height:250px; object-fit:cover; border-radius:8px; margin-bottom:1rem;">
                 <h3>${prod.name}</h3>
@@ -286,7 +286,7 @@ async function fetchHeroSlides() {
         }
 
         container.innerHTML = slides.map((slide, index) => `
-            <div class="hero-slide ${index === 0 ? 'active' : ''}" style="background-image: url('${slide.image_url}');"></div>
+            <div class="hero-slide ${index === 0 ? 'active' : ''}" style="background-image: url('${slide.image_url}'); background-size: cover; background-position: center;"></div>
         `).join('');
 
         if (slides.length > 1) {
@@ -305,43 +305,38 @@ async function fetchHeroSlides() {
 
 // --- Hämta Egna Sidor (CMS) ---
 async function fetchCustomPages() {
-    const container = document.getElementById('dynamic-pages-container');
-    const navLinksList = document.querySelector('.nav-links');
-    if (!container || !navLinksList) return;
+    const container = document.getElementById('dynamic-pages-container');
+    const navLinksList = document.querySelector('.nav-links');
+    if (!container || !navLinksList) return;
 
+    try {
+        const res = await fetch('/api/pages');
+        if (res.ok) {
+            const pages = await res.json();
+            pages.forEach(page => {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="#${page.slug}" class="nav-tab" data-tab="${page.slug}">${page.title}</a>`;
+                navLinksList.appendChild(li);
 
-
-
-    try {
-        const res = await fetch('/api/pages');
-        if (res.ok) {
-            const pages = await res.json();
-            pages.forEach(page => {
-                const li = document.createElement('li');
-                li.innerHTML = `<a href="#${page.slug}" class="nav-tab" data-tab="${page.slug}">${page.title}</a>`;
-                navLinksList.appendChild(li);
-
-
-
-
-                const section = document.createElement('section');
-                section.id = page.slug;
-                section.className = 'tab-content';
-                section.innerHTML = `
-                    <h2 class="section-title">${page.title}</h2>
-                    <div class="custom-content" style="max-width:900px; margin:0 auto; padding: 0 1rem; line-height:1.7;">
-                        ${page.content}
-                    </div>
-                `;
-                container.appendChild(section);
-            });
-        }
-    } catch (err) { 
-        console.error("Kunde inte ladda egna sidor:", err); 
-    } finally {
-        bindTabs(); // Binder alla länk-knappar
-        checkHashRoute(); // Tvingar fram rätt flik om man anländer via direktlänk!
-    }
+                const section = document.createElement('section');
+                section.id = page.slug;
+                section.className = 'tab-content';
+                section.innerHTML = `
+                    <h2 class="section-title">${page.title}</h2>
+                    <div class="custom-content" style="max-width:900px; margin:0 auto; padding: 0 1rem; line-height:1.7;">
+                        ${page.content}
+                    </div>
+                `;
+                container.appendChild(section);
+            });
+            // Re-bind tabs if pages were added
+            if (pages.length > 0) {
+                bindTabs();
+            }
+        }
+    } catch (err) { 
+        console.error("Kunde inte ladda egna sidor:", err); 
+    }
 }
 
 // Kör vid sidladdning
@@ -358,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     bindTabs(); 
-    fetchShippingRates(); // Hämtar fraktkostnaderna direkt
+    fetchShippingRates();
     fetchHeroSlides();
     fetchCustomPages();
     fetchProducts();
@@ -379,40 +374,3 @@ document.addEventListener('DOMContentLoaded', () => {
         appearOnScroll.observe(fader);
     });
 });
-
-// --- Kontaktformulär Logik ---
-const contactForm = document.getElementById('contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); 
-        
-        const fornamn = document.getElementById('fornamn').value;
-        const efternamn = document.getElementById('efternamn').value;
-        const epost = document.getElementById('epost').value;
-        const meddelande = document.getElementById('meddelande').value;
-        const submitBtn = contactForm.querySelector('button[type="submit"]');
-
-        submitBtn.textContent = 'Skickar...';
-        submitBtn.disabled = true;
-
-        try {
-            const res = await fetch('/api/contact', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ fornamn, efternamn, epost, meddelande })
-            });
-
-            if (res.ok) {
-                alert('Tack! Ditt meddelande har skickats till oss.');
-                contactForm.reset(); 
-            } else {
-                alert('Något gick fel när meddelandet skulle skickas. Försök igen.');
-            }
-        } catch (err) {
-            alert('Kunde inte ansluta till servern.');
-        } finally {
-            submitBtn.textContent = 'Skicka Meddelande';
-            submitBtn.disabled = false;
-        }
-    });
-}
