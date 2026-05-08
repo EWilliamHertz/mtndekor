@@ -347,7 +347,7 @@ async function fetchCustomPages() {
 // Kör vid sidladdning
 document.addEventListener('DOMContentLoaded', () => {
     
-    const urlParams = newSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('success')) {
         alert("Tack för din beställning! Betalningen är genomförd.");
         window.history.replaceState(null, '', window.location.pathname);
