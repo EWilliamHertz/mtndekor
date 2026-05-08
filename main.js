@@ -12,7 +12,6 @@ if (hamburger) {
 // --- Flik-navigering (Tabs) Logik ---
 function bindTabs() {
     const tabs = document.querySelectorAll('.nav-tab');
-    const tabContents = document.querySelectorAll('.tab-content');
 
     tabs.forEach(tab => {
         const newTab = tab.cloneNode(true);
@@ -24,6 +23,9 @@ function bindTabs() {
 
             e.preventDefault();
             
+            // Uppdaterar URL:en så att direktlänkar (t.ex. /#butik) fungerar
+            history.pushState(null, null, `#${targetId}`);
+            
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
             
@@ -31,6 +33,8 @@ function bindTabs() {
             const targetSection = document.getElementById(targetId);
             if (targetSection) targetSection.classList.add('active-tab');
 
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
             if (hamburger) {
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('active');
@@ -39,6 +43,19 @@ function bindTabs() {
     });
 }
 
+// Kollar om adressen innehåller t.ex. #butik och öppnar fliken
+function checkHashRoute() {
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+        const targetTab = document.querySelector(`.nav-tab[data-tab="${hash}"]`);
+        if (targetTab) {
+            targetTab.click();
+        }
+    }
+}
+
+// Lyssna på webbläsarens "Bakåt/Framåt"-knappar
+window.addEventListener('popstate', checkHashRoute);
 // --- Kundvagn & Frakt Logik ---
 const modal = document.getElementById('swish-modal');
 const closeBtn = document.querySelector('.close-btn');
@@ -288,34 +305,43 @@ async function fetchHeroSlides() {
 
 // --- Hämta Egna Sidor (CMS) ---
 async function fetchCustomPages() {
-    const container = document.getElementById('dynamic-pages-container');
-    const navLinksList = document.querySelector('.nav-links');
-    if (!container || !navLinksList) return;
+    const container = document.getElementById('dynamic-pages-container');
+    const navLinksList = document.querySelector('.nav-links');
+    if (!container || !navLinksList) return;
 
-    try {
-        const res = await fetch('/api/pages');
-        if (!res.ok) return;
-        const pages = await res.json();
 
-        pages.forEach(page => {
-            const li = document.createElement('li');
-            li.innerHTML = `<a href="#${page.slug}" class="nav-tab" data-tab="${page.slug}">${page.title}</a>`;
-            navLinksList.appendChild(li);
 
-            const section = document.createElement('section');
-            section.id = page.slug;
-            section.className = 'tab-content';
-            section.innerHTML = `
-                <h2 class="section-title">${page.title}</h2>
-                <div class="custom-content" style="max-width:900px; margin:0 auto; padding: 0 1rem; line-height:1.7;">
-                    ${page.content}
-                </div>
-            `;
-            container.appendChild(section);
-        });
 
-        bindTabs(); 
-    } catch (err) { console.error(err); }
+    try {
+        const res = await fetch('/api/pages');
+        if (res.ok) {
+            const pages = await res.json();
+            pages.forEach(page => {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="#${page.slug}" class="nav-tab" data-tab="${page.slug}">${page.title}</a>`;
+                navLinksList.appendChild(li);
+
+
+
+
+                const section = document.createElement('section');
+                section.id = page.slug;
+                section.className = 'tab-content';
+                section.innerHTML = `
+                    <h2 class="section-title">${page.title}</h2>
+                    <div class="custom-content" style="max-width:900px; margin:0 auto; padding: 0 1rem; line-height:1.7;">
+                        ${page.content}
+                    </div>
+                `;
+                container.appendChild(section);
+            });
+        }
+    } catch (err) { 
+        console.error("Kunde inte ladda egna sidor:", err); 
+    } finally {
+        bindTabs(); // Binder alla länk-knappar
+        checkHashRoute(); // Tvingar fram rätt flik om man anländer via direktlänk!
+    }
 }
 
 // Kör vid sidladdning
