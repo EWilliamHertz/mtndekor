@@ -69,7 +69,6 @@ window.addEventListener('popstate', () => {
 // ============================================================
 // KUNDVAGN & FRAKT
 // ============================================================
-const modal       = document.getElementById('swish-modal');
 const closeBtn    = document.querySelector('.close-btn');
 const openCartBtn  = document.getElementById('open-cart-btn');
 const closeCartBtn = document.getElementById('close-cart-btn');

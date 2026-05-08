@@ -141,6 +141,14 @@
                         <h3>🎨 Fordonsfoliering</h3>
                         <p>Hel- och delfolieringar med lackliknande finish. Vi förvandlar fordon till unika konstverk.</p>
                     </div>
+                    <div class="service-card">
+                        <h3>🚿 Bilrekond</h3>
+                        <p>Professionell invändig och utvändig rengöring som återställer bilen till showroom-skick. Vi tar hand om varje detalj.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>✨ Polering</h3>
+                        <p>Lackpolering som tar bort repor, swirl marks och oxidering – och återger lacken ett djupt, spegelblank glans.</p>
+                    </div>
                 </div>
                 <div style="text-align: center; margin-top: 2rem;">
                     <button class="btn" onclick="switchTab('tjanster')" style="background: transparent; border: 2px solid var(--accent-primary); color: var(--accent-primary);">Läs mer om våra tjänster &rarr;</button>
@@ -193,6 +201,32 @@
                     <p style="line-height: 1.9; color: var(--text-light); font-size: 1.05rem;">
                         MTN Dekor är experter på foliering av bilar, lastbilar, båtar och andra fordon. Vi betraktar foliering som ett hantverk snarare än enbart marknadsföring. Med fokus på precision och en lackliknande finish erbjuder vi hel- och delfolieringar samt anpassade dekaler. Våra nöjda kunder vittnar om vår förmåga att förvandla fordon till unika konstverk.
                     </p>
+                </div>
+
+                <div class="service-detail-card fade-in-section">
+                    <h3 style="font-size: 1.5rem; color: var(--accent-primary); margin-bottom: 1rem;">🚿 Bilrekond</h3>
+                    <p style="line-height: 1.9; color: var(--text-light); font-size: 1.05rem; margin-bottom: 1.5rem;">
+                        En professionell bilrekonditionering är mer än bara en tvätt — det är en komplett återställning av din bil, inifrån och ut. Vi rensar bort smuts, fläckar och lukter från interiören och återger exteriören ett fräscht och välvårdat utseende.
+                    </p>
+                    <div style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 8px;">
+                        <p style="margin: 0.8rem 0; color: var(--text-light);"><strong style="color: var(--accent-primary);">✓ Invändig rekond:</strong> Dammsugning, rengöring av klädsel, plastytor, mattor och glasrutor.</p>
+                        <p style="margin: 0.8rem 0; color: var(--text-light);"><strong style="color: var(--accent-primary);">✓ Utvändig rekond:</strong> Handtvätt, fälgrengöring, däckglans och torkning.</p>
+                        <p style="margin: 0.8rem 0; color: var(--text-light);"><strong style="color: var(--accent-primary);">✓ Luktborttagning:</strong> Effektiv behandling mot tobak, husdjur och fuktlukt.</p>
+                        <p style="margin: 0.8rem 0; color: var(--text-light);"><strong style="color: var(--accent-primary);">✓ Showroom-finish:</strong> Resultatet är ett fordon som ser ut och känns som nytt.</p>
+                    </div>
+                </div>
+
+                <div class="service-detail-card fade-in-section">
+                    <h3 style="font-size: 1.5rem; color: var(--accent-primary); margin-bottom: 1rem;">✨ Polering</h3>
+                    <p style="line-height: 1.9; color: var(--text-light); font-size: 1.05rem; margin-bottom: 1.5rem;">
+                        Lackpolering är det effektivaste sättet att återställa bilens lack och ta bort ytliga repor, swirl marks och oxidering. Resultatet är ett djupt, spegelblank glans som gör bilen nästan omisskännbar.
+                    </p>
+                    <div style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 8px;">
+                        <p style="margin: 0.8rem 0; color: var(--text-light);"><strong style="color: var(--accent-primary);">✓ Reporborttagning:</strong> Vi polerar bort ytliga repor och swirl marks som syns i solljus.</p>
+                        <p style="margin: 0.8rem 0; color: var(--text-light);"><strong style="color: var(--accent-primary);">✓ Oxidering:</strong> Mattad och sliten lack återfår sin ursprungliga djup och glans.</p>
+                        <p style="margin: 0.8rem 0; color: var(--text-light);"><strong style="color: var(--accent-primary);">✓ Maskinkpolering:</strong> Utförs med professionell utrustning för jämnt och precist resultat.</p>
+                        <p style="margin: 0.8rem 0; color: var(--text-light);"><strong style="color: var(--accent-primary);">✓ Vaxning/försegling:</strong> Avslutande skyddande vax eller försegling för längre hållbarhet.</p>
+                    </div>
                 </div>
 
                 <div style="text-align: center; margin: 3rem 0 5rem;">
@@ -350,28 +384,11 @@
                 <span>Totalt:</span>
                 <span><span id="cart-total-price">0</span> kr</span>
             </h3>
-            <button id="checkout-btn" class="btn swish-btn" style="width: 100%; margin-top: 1.5rem;">Gå till kassan (Stripe)</button>
+            <button id="checkout-btn" class="btn" style="width: 100%; margin-top: 1.5rem;">Gå till kassan (Stripe)</button>
         </div>
     </div>
 
-    <!-- ===== SWISH MODAL ===== -->
-    <div id="swish-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Betala med Swish</h2>
-            <p>Att betala: <strong id="selected-service-name"></strong> kr</p>
-            <div class="swish-instructions">
-                <p>1. Öppna Swish-appen.</p>
-                <p>2. Swisha till nummer: <strong>123 186 10 20</strong></p>
-            </div>
-            <div class="form-group">
-                <label for="customer-phone">Ange ditt telefonnummer så vi kan matcha betalningen:</label>
-                <input type="tel" id="customer-phone" placeholder="T.ex. 0701234567" required>
-            </div>
-            <button id="confirm-payment-btn" class="btn swish-btn">Jag har betalat</button>
-            <p id="payment-success-msg" style="display:none; color:#4CAF50; margin-top:1rem;">Tack! Din beställning är mottagen och granskas nu av vår personal.</p>
-        </div>
-    </div>
+
 
     <div id="cart-overlay" class="cart-overlay"></div>
 
