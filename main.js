@@ -15,7 +15,6 @@ function bindTabs() {
     const tabContents = document.querySelectorAll('.tab-content');
 
     tabs.forEach(tab => {
-        // Vi klonar för att rensa gamla händelser om vi kör funktionen flera gånger
         const newTab = tab.cloneNode(true);
         tab.parentNode.replaceChild(newTab, tab);
 
@@ -40,25 +39,22 @@ function bindTabs() {
     });
 }
 
-// --- Kundvagn (Cart) & Modal Logik ---
+// --- Kundvagn & Frakt Logik ---
 const modal = document.getElementById('swish-modal');
 const closeBtn = document.querySelector('.close-btn');
-const serviceNameDisplay = document.getElementById('selected-service-name');
-const confirmBtn = document.getElementById('confirm-payment-btn');
-const phoneInput = document.getElementById('customer-phone');
-const successMsg = document.getElementById('payment-success-msg');
 
 const openCartBtn = document.getElementById('open-cart-btn');
 const closeCartBtn = document.getElementById('close-cart-btn');
 const cartSidebar = document.getElementById('cart-sidebar');
 const cartOverlay = document.getElementById('cart-overlay');
 const cartItemsContainer = document.getElementById('cart-items');
-const cartTotalPrice = document.getElementById('cart-total-price');
-const cartBadge = document.getElementById('cart-badge');
 const checkoutBtn = document.getElementById('checkout-btn');
 
 let cart = [];
 let cartTotal = 0;
+let cartWeight = 0;
+let shippingRates = [];
+let currentShippingCost = 0;
 
 function toggleCart() {
     if (cartSidebar) cartSidebar.classList.toggle('open');
@@ -69,31 +65,57 @@ if (openCartBtn) openCartBtn.addEventListener('click', toggleCart);
 if (closeCartBtn) closeCartBtn.addEventListener('click', toggleCart);
 if (cartOverlay) cartOverlay.addEventListener('click', toggleCart);
 
+async function fetchShippingRates() {
+    try {
+        const res = await fetch('/api/shipping');
+        if (res.ok) shippingRates = await res.json();
+    } catch(err) { console.error(err); }
+}
+
 function updateCartUI() {
     if (!cartItemsContainer) return;
     cartItemsContainer.innerHTML = '';
     cartTotal = 0;
+    cartWeight = 0;
 
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p style="color:var(--text-muted);">Varukorgen är tom.</p>';
+        currentShippingCost = 0;
     } else {
         cart.forEach((item, index) => {
             cartTotal += parseInt(item.price);
+            cartWeight += parseInt(item.weight || 0);
+            
             const itemEl = document.createElement('div');
             itemEl.className = 'cart-item';
             itemEl.innerHTML = `
                 <div class="cart-item-info">
                     <h4>${item.name}</h4>
-                    <p>${item.price} kr</p>
+                    <p>${item.price} kr <span style="font-size:0.8rem; color:#888;">(${item.weight || 0}g)</span></p>
                 </div>
                 <button class="remove-item-btn" onclick="removeFromCart(${index})">Ta bort</button>
             `;
             cartItemsContainer.appendChild(itemEl);
         });
+
+        // Räkna ut frakt baserat på totalvikt
+        currentShippingCost = 0;
+        if (shippingRates.length > 0) {
+            const applicableRate = shippingRates.find(r => cartWeight >= r.min_weight && cartWeight <= r.max_weight);
+            if (applicableRate) {
+                currentShippingCost = applicableRate.price;
+            } else {
+                // Om vikten är över max, ta den dyraste frakten
+                currentShippingCost = shippingRates[shippingRates.length - 1].price;
+            }
+        }
     }
 
-    if (cartTotalPrice) cartTotalPrice.textContent = cartTotal;
-    if (cartBadge) cartBadge.textContent = cart.length;
+    if (document.getElementById('cart-subtotal')) document.getElementById('cart-subtotal').textContent = cartTotal;
+    if (document.getElementById('cart-weight')) document.getElementById('cart-weight').textContent = cartWeight;
+    if (document.getElementById('cart-shipping')) document.getElementById('cart-shipping').textContent = currentShippingCost;
+    if (document.getElementById('cart-total-price')) document.getElementById('cart-total-price').textContent = cartTotal + currentShippingCost;
+    if (document.getElementById('cart-badge')) document.getElementById('cart-badge').textContent = cart.length;
 }
 
 function flyToCart(buttonEl, imageUrl) {
@@ -129,8 +151,8 @@ function flyToCart(buttonEl, imageUrl) {
     }, 600);
 }
 
-window.addToCart = function(event, name, price, imageUrl) {
-    cart.push({ name, price });
+window.addToCart = function(event, name, price, imageUrl, weight) {
+    cart.push({ name, price, weight });
     updateCartUI();
     flyToCart(event.target, imageUrl);
 };
@@ -152,7 +174,7 @@ if (checkoutBtn) {
             const response = await fetch('/api/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ cartItems: cart })
+                body: JSON.stringify({ cartItems: cart, shippingCost: currentShippingCost })
             });
 
             const data = await response.json();
@@ -188,11 +210,12 @@ async function fetchProducts() {
             const card = document.createElement('div');
             card.className = 'service-card fade-in appear';
             const safeName = prod.name ? prod.name.replace(/'/g, "\\'") : '';
+            // Vi skickar nu med vikten i addToCart!
             card.innerHTML = `
-                <img src="${prod.image_url}" alt="${prod.name}" style="width:100%; height:250px; object-fit:cover; border-radius:8px; margin-bottom:1rem;">
+                <img src="${prod.image_url}" alt="${prod.name}" loading="lazy" style="width:100%; height:250px; object-fit:cover; border-radius:8px; margin-bottom:1rem;">
                 <h3>${prod.name}</h3>
                 <p style="font-size:1.4rem; color:var(--accent-primary); font-weight:bold; margin-bottom:1rem;">${prod.price} kr</p>
-                <button class="btn buy-btn" onclick="addToCart(event, '${safeName}', ${prod.price}, '${prod.image_url}')">Lägg i varukorg</button>
+                <button class="btn buy-btn" onclick="addToCart(event, '${safeName}', ${prod.price}, '${prod.image_url}', ${prod.weight || 0})">Lägg i varukorg</button>
             `;
             shopGrid.appendChild(card);
         });
@@ -218,7 +241,7 @@ async function fetchProjects() {
             card.onclick = () => window.location.href = `/project.html?id=${proj.id}`;
             
             card.innerHTML = `
-                <img src="${proj.main_image}" alt="${proj.title}" style="width:100%; height:250px; object-fit:cover; border-radius:8px; margin-bottom:1rem;">
+                <img src="${proj.main_image}" alt="${proj.title}" loading="lazy" style="width:100%; height:250px; object-fit:cover; border-radius:8px; margin-bottom:1rem;">
                 <h3 style="color:var(--accent-primary);">${proj.title}</h3>
                 <p style="color:var(--text-muted); font-size:0.9rem;">${proj.description ? proj.description.substring(0, 80) + '...' : ''}</p>
                 <p style="margin-top:1rem; font-weight:bold; font-size:0.8rem; text-transform:uppercase;">Läs mer →</p>
@@ -298,7 +321,7 @@ async function fetchCustomPages() {
 // Kör vid sidladdning
 document.addEventListener('DOMContentLoaded', () => {
     
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = newSearchParams(window.location.search);
     if (urlParams.get('success')) {
         alert("Tack för din beställning! Betalningen är genomförd.");
         window.history.replaceState(null, '', window.location.pathname);
@@ -308,8 +331,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.history.replaceState(null, '', window.location.pathname);
     }
 
-    // Ladda in flikarna och hämta allt dynamiskt innehåll
     bindTabs(); 
+    fetchShippingRates(); // Hämtar fraktkostnaderna direkt
     fetchHeroSlides();
     fetchCustomPages();
     fetchProducts();

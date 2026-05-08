@@ -7,36 +7,34 @@ const pool = new Pool({
 export default async function handler(req, res) {
     try {
         await pool.query(`
-            CREATE TABLE IF NOT EXISTS products (
+            CREATE TABLE IF NOT EXISTS shipping_rates (
                 id SERIAL PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
+                min_weight INT NOT NULL,
+                max_weight INT NOT NULL,
                 price INT NOT NULL,
-                image_url TEXT NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `);
-        // Lägger till vikt-kolumnen om den inte redan finns
-        await pool.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS weight INT DEFAULT 0;`);
     } catch (err) {
         console.error("Database error:", err);
     }
 
     if (req.method === 'GET') {
         try {
-            const result = await pool.query('SELECT * FROM products ORDER BY created_at DESC');
+            const result = await pool.query('SELECT * FROM shipping_rates ORDER BY min_weight ASC');
             return res.status(200).json(result.rows);
         } catch (err) {
             return res.status(500).json({ error: err.message });
         }
     } 
     else if (req.method === 'POST') {
-        const { name, price, image_url, weight } = req.body;
+        const { min_weight, max_weight, price } = req.body;
         try {
             await pool.query(
-                'INSERT INTO products (name, price, image_url, weight) VALUES ($1, $2, $3, $4)', 
-                [name, price, image_url, weight || 0]
+                'INSERT INTO shipping_rates (min_weight, max_weight, price) VALUES ($1, $2, $3)', 
+                [min_weight, max_weight, price]
             );
-            return res.status(201).json({ message: 'Produkt skapad' });
+            return res.status(201).json({ message: 'Fraktklass skapad' });
         } catch (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -44,7 +42,7 @@ export default async function handler(req, res) {
     else if (req.method === 'DELETE') {
         const { id } = req.body;
         try {
-            await pool.query('DELETE FROM products WHERE id = $1', [id]);
+            await pool.query('DELETE FROM shipping_rates WHERE id = $1', [id]);
             return res.status(200).json({ message: 'Borttagen' });
         } catch (err) {
             return res.status(500).json({ error: err.message });

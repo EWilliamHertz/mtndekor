@@ -19,14 +19,11 @@
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-
     <header>
         <div class="logo">
-            <a href="#" aria-label="Hem">
-                <img src="https://static.wixstatic.com/media/f3e2b9_77b448bbf6024f3d95d6aa7b8bddfe30~mv2.png/v1/fill/w_880,h_660,fp_0.50_0.50,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/f3e2b9_77b448bbf6024f3d95d6aa7b8bddfe30~mv2.png" alt="MTN DEKOR Logo">
-            </a>
+            <img src="https://static.wixstatic.com/media/f3e2b9_77b448bbf6024f3d95d6aa7b8bddfe30~mv2.png" alt="MTN DEKOR Logo" loading="lazy">
         </div>
-<nav aria-label="Huvudnavigering" style="display: flex; align-items: center; gap: 2rem;">
+        <nav aria-label="Huvudnavigering" style="display: flex; align-items: center; gap: 2rem;">
             <ul class="nav-links">
                 <li><a href="#hem" class="nav-tab active" data-tab="hem">Hem</a></li>
                 <li><a href="#tjanster" class="nav-tab" data-tab="tjanster">Tjänster</a></li>
@@ -45,133 +42,99 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
+                <span class="menu-text">Meny</span>
             </div>
         </nav>
     </header>
 
+    <main style="padding: 2rem 0;">
+        <div id="dynamic-pages-container"></div>
 
+        <section id="hem" class="tab-content active-tab">
+            <div class="hero" style="border-radius: 12px; margin: 0 5% 3rem 5%; min-height: 50vh; position: relative; overflow: hidden; padding: 0;">
+                <div id="hero-slides-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
+                </div>
+                <div style="position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; background: rgba(0,0,0,0.5); border-radius: 12px;">
+                    <h1>MTN DEKOR</h1>
+                    <p>Specialister inom Fordonsdesign och Optimeringstjänster</p>
+                </div>
+            </div>
 
+            <div class="services-grid fade-in">
+                <div class="service-card">
+                    <h3>Fordondekor</h3>
+                    <p>Högkvalitativ printad fordonsdekor.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Båtfoliering</h3>
+                    <p>Specialanpassad foliering som skyddar.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Toning</h3>
+                    <p>Toning för fönster och lyktor för komfort och stil.</p>
+                </div>
+            </div>
+        </section>
 
-    <main style="padding: 2rem 0;">
-        <section id="hem" class="tab-content active-tab">
-            <div class="hero" style="border-radius: 12px; margin: 0 5% 3rem 5%; min-height: 50vh; position: relative; overflow: hidden; padding: 0;">
-                <div id="hero-slides-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
-                    </div>
-                <div style="position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; background: rgba(0,0,0,0.5); border-radius: 12px;">
-                    <h1>MTN DEKOR</h1>
-                    <p>Specialister inom Fordonsdesign och Optimeringstjänster</p>
-                </div>
-            </div>
-            <div style="text-align: center; max-width: 800px; margin: 0 auto; padding: 0 1rem; margin-bottom: 4rem;">
-                <h2 style="color: var(--accent-primary); font-size: 2.5rem; margin-bottom: 1.5rem;">Välkommen till oss</h2>
-                <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 2rem;">
-                    Vi brinner för att förvandla och skydda ditt fordon med högsta precision. Oavsett om det gäller stenskottsfilm, solfilm, optimering eller foliering ser vi varje projekt som ett gediget hantverk.
-                </p>
-            </div>
-        </section>
         <section id="tjanster" class="tab-content">
-            <h2 class="section-title">Tjänster Vi Erbjuder</h2>
-            <div class="services-grid">
+            <h2 class="section-title fade-in">Våra Tjänster</h2>
+            <div class="services-grid fade-in">
                 <div class="service-card">
-                    <h3>Stenskottsfilm</h3>
-                    <p>Ger ett komplett skydd för bilens lack mot stenskott, repor, UV-blekning och slitage. Till skillnad från keramiska behandlingar som kan vara ömtåliga, är filmen praktiskt taget osynlig och blockerar skador effektivt.</p>
-                    <ul>
-                        <li>Osynligt skydd</li>
-                        <li>Förhindrar rost och repor</li>
-                        <li>Ett starkt alternativ till keramiskt skydd</li>
-                        <li>Bibehåller fordonets skick</li>
-                    </ul>
+                    <h3>PPF (Stenskottsfilm)</h3>
+                    <p>Osynligt skydd mot stenskott och repor med självläkande egenskaper.</p>
                 </div>
-
                 <div class="service-card">
-                    <h3>Solfilm</h3>
-                    <p>Ger UV-skydd, minskar värmen inuti bilen och ökar insynsskyddet. Bidrar till en behagligare körning och skyddar inredningen från att blekas.</p>
-                    <ul>
-                        <li>UV-skydd & minskad värme</li>
-                        <li>Ökat insynsskydd</li>
-                        <li>Skyddar interiören från blekning</li>
-                        <li>Behagligare och säkrare körupplevelse</li>
-                    </ul>
+                    <h3>Hel-foliering</h3>
+                    <p>Byt färg på ditt fordon samtidigt som originallacken bevaras och skyddas.</p>
                 </div>
-
                 <div class="service-card">
-                    <h3>Optimering</h3>
-                    <p>Motoroptimering för att förbättra fordonets prestanda och effektivitet. Varför vänta? Ge din bil den uppgradering den förtjänar!</p>
-                    <ul>
-                        <li>Märkbar ökning av hästkrafter och vridmoment</li>
-                        <li>Bättre bränsleekonomi</li>
-                        <li>Minskad miljöpåverkan via lägre utsläpp</li>
-                        <li>Skyddar din investering och ökar livslängden</li>
-                    </ul>
+                    <h3>Chrome delete</h3>
+                    <p>Ge bilen en mer aggressiv och modern look genom att foliera lister och detaljer.</p>
                 </div>
-
                 <div class="service-card">
-                    <h3>Foliering</h3>
-                    <p>Vi är experter på foliering av bilar, lastbilar, båtar och andra fordon. Vi ser foliering som ett hantverk, inte bara marknadsföring, med fokus på precision och en lackliknande finish.</p>
-                    <ul>
-                        <li>Hel- och delfoliering</li>
-                        <li>Specialanpassade dekaler</li>
-                        <li>Lackliknande finish och detaljprecision</li>
-                        <li>För bilar, lastbilar och båtar</li>
-                    </ul>
+                    <h3>Lastskydd</h3>
+                    <p>Specialfilm som skyddar bagageutrymmet och dörrtrösklar vid i- och urlastning.</p>
                 </div>
             </div>
         </section>
 
         <section id="butik" class="tab-content">
-            <h2 class="section-title">Vår Butik</h2>
-            <p class="portfolio-text">Högkvalitativa tillbehör för fordon och samlare.</p>
+            <h2 class="section-title fade-in">Vår Butik</h2>
             <div class="services-grid" id="dynamic-shop-grid">
                 </div>
         </section>
 
         <section id="projekt" class="tab-content">
-            <h2 class="section-title">Genomförda Projekt</h2>
-            <p class="portfolio-text">
-                "Vi är stolta över att kunna presentera ett urval av våra genomförda projekt. Varje arbete är unikt och reflekterar vår passion för design och detaljer."
-            </p>
-            <div class="gallery" id="dynamic-project-gallery">
+            <h2 class="section-title fade-in">Våra Projekt</h2>
+            <div class="services-grid" id="dynamic-project-gallery">
                 </div>
         </section>
-    </main>
 
-    <section id="kontakt" class="contact-section">
-        <div class="contact-container">
-            <div class="contact-info">
-                <h3>Kontakta Oss</h3>
-                <p><strong>Besöksadress:</strong><br> Bladvägen 17<br> 293 42 Olofström/Blekinge, Sverige</p>
-                <p><strong>Telefon:</strong><br> <a href="tel:0720189160">0720 189 160</a></p>
-                <p><strong>E-post:</strong><br> <a href="mailto:Mtn_dekor@hotmail.com">Mtn_dekor@hotmail.com</a></p>
-                
-                <div class="social-links">
-                    <a href="https://www.facebook.com/p/Mtn-Dekor-61555332775951/?locale=sv_SE" target="_blank" rel="noopener noreferrer">Facebook</a>
-                    <a href="https://www.instagram.com/mtn.dekor/" target="_blank" rel="noopener noreferrer">Instagram</a>
-                </div>
-            </div>
-
-            <div class="contact-form-container">
+        <section id="kontakt" class="fade-in appear" style="margin-top: 5rem; padding: 0 5%;">
+            <h2 class="section-title">Kontakta Oss</h2>
+            <div class="services-grid" style="grid-template-columns: 1fr;">
                 <form id="contact-form" class="contact-form">
                     <div class="form-group">
-                        <label for="fornamn">Förnamn</label>
-                        <input type="text" id="fornamn" name="fornamn" required>
+                        <label for="fornamn">Förnamn *</label>
+                        <input type="text" id="fornamn" required>
                     </div>
                     <div class="form-group">
-                        <label for="efternamn">Efternamn</label>
-                        <input type="text" id="efternamn" name="efternamn" required>
+                        <label for="efternamn">Efternamn *</label>
+                        <input type="text" id="efternamn" required>
                     </div>
                     <div class="form-group">
-                        <label for="epost">E-post</label>
-                        <input type="email" id="epost" name="epost" required>
+                        <label for="epost">E-post *</label>
+                        <input type="email" id="epost" required>
                     </div>
                     <div class="form-group">
-                        <label for="meddelande">Meddelande</label>
-                        <textarea id="meddelande" name="meddelande" required></textarea>
+                        <label for="meddelande">Meddelande *</label>
+                        <textarea id="meddelande" rows="5" required></textarea>
                     </div>
                     <button type="submit" class="btn">Skicka Meddelande</button>
                 </form>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <div id="cart-sidebar" class="cart-sidebar">
         <div class="cart-header">
@@ -181,8 +144,19 @@
         <div class="cart-items" id="cart-items">
             </div>
         <div class="cart-footer">
-            <h3>Totalt: <span id="cart-total-price">0</span> kr</h3>
-            <button id="checkout-btn" class="btn swish-btn" style="width: 100%; margin-top: 1rem;">Gå till kassan (Stripe)</button>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--text-muted);">
+                <span>Varor:</span>
+                <span><span id="cart-subtotal">0</span> kr</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--text-muted);">
+                <span>Frakt (<span id="cart-weight">0</span>g):</span>
+                <span><span id="cart-shipping">0</span> kr</span>
+            </div>
+            <h3 style="display: flex; justify-content: space-between; margin: 0; border-top: 1px solid #333; padding-top: 1rem;">
+                <span>Totalt:</span>
+                <span><span id="cart-total-price">0</span> kr</span>
+            </h3>
+            <button id="checkout-btn" class="btn swish-btn" style="width: 100%; margin-top: 1.5rem;">Gå till kassan (Stripe)</button>
         </div>
     </div>
 
@@ -207,9 +181,9 @@
     <div id="cart-overlay" class="cart-overlay"></div>
 
     <footer>
-        <p>&copy; 2026 MTN DEKOR. Alla rättigheter förbehållna. | <a href="/admin.html" style="color:var(--text-muted); text-decoration:underline;">Admin Login</a></p>
+        <p>&copy; 2026 MTN DEKOR. Alla rättigheter förbehållna.</p>
     </footer>
 
-    <script type="module" src="/main.js"></script>
+    <script src="/main.js"></script>
 </body>
 </html>

@@ -16,29 +16,9 @@
         .delete-btn { background-color: #dc3545; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 4px; }
         .support-box { background-color: rgba(212, 175, 55, 0.1); border-left: 4px solid var(--accent-primary); padding: 1.5rem; margin-top: 1rem; }
         
-        /* Login Screen Styles */
-        #login-screen {
-            max-width: 400px;
-            margin: 10vh auto;
-            text-align: center;
-        }
-        #login-screen input {
-            width: 100%;
-            padding: 1rem;
-            margin: 1rem 0;
-            background-color: var(--bg-dark);
-            border: 1px solid var(--accent-primary);
-            color: white;
-            border-radius: 4px;
-        }
-
-        /* Loading Spinner */
-        .loading {
-            display: none;
-            color: var(--accent-primary);
-            font-weight: bold;
-            margin-top: 1rem;
-        }
+        #login-screen { max-width: 400px; margin: 10vh auto; text-align: center; }
+        #login-screen input { width: 100%; padding: 1rem; margin: 1rem 0; background-color: var(--bg-dark); border: 1px solid var(--accent-primary); color: white; border-radius: 4px; }
+        .loading { display: none; color: var(--accent-primary); font-weight: bold; margin-top: 1rem; }
     </style>
 </head>
 <body>
@@ -58,62 +38,77 @@
         
         <section class="admin-section">
             <h2 style="color:var(--accent-primary);">Bildspel (Startsidan)</h2>
-            <p>Lägg upp stora, fina bilder som roterar automatiskt högst upp på hemsidan.</p>
             <div class="contact-form" style="margin-top: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #333; padding-bottom: 2rem;">
                 <div class="form-group">
                     <label>Välj en ny bild</label>
                     <input type="file" id="hero-file" accept="image/*" style="padding: 0.5rem; background: transparent; border: none;">
                 </div>
                 <button id="add-hero-btn" class="btn">Ladda upp till Bildspel</button>
-                <div id="hero-loading" class="loading">Laddar upp bild... Vänligen vänta.</div>
+                <div id="hero-loading" class="loading">Laddar upp bild säkert... Vänligen vänta.</div>
             </div>
             <div style="overflow-x:auto;">
                 <table>
-                    <thead>
-                        <tr><th>Bild</th><th>Åtgärd</th></tr>
-                    </thead>
+                    <thead><tr><th>Bild</th><th>Åtgärd</th></tr></thead>
                     <tbody id="hero-table-body"></tbody>
                 </table>
             </div>
         </section>
 
         <section class="admin-section">
-            <h2 style="color:var(--accent-primary);">Inkomna Beställningar (Swish)</h2>
+            <h2 style="color:var(--accent-primary);">Hantera Fraktklasser (Vikt)</h2>
+            <p>Ange intervall för hur mycket korgen ska kosta att skicka beroende på totalvikt.</p>
+            <div class="contact-form" style="margin-top: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #333; padding-bottom: 2rem;">
+                <div style="display:flex; gap:1rem;">
+                    <div class="form-group" style="flex:1;">
+                        <label>Minsta vikt (gram)</label>
+                        <input type="number" id="ship-min" placeholder="T.ex. 0">
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label>Högsta vikt (gram)</label>
+                        <input type="number" id="ship-max" placeholder="T.ex. 1000">
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label>Fraktpris (kr)</label>
+                        <input type="number" id="ship-price" placeholder="T.ex. 49">
+                    </div>
+                </div>
+                <button id="add-shipping-btn" class="btn">Lägg till Fraktklass</button>
+            </div>
             <div style="overflow-x:auto;">
                 <table>
-                    <thead>
-                        <tr><th>Produkt/Tjänst</th><th>Telefonnummer</th><th>Datum</th><th>Status</th><th>Åtgärd</th></tr>
-                    </thead>
-                    <tbody id="orders-table-body"></tbody>
+                    <thead><tr><th>Viktintervall</th><th>Pris</th><th>Åtgärd</th></tr></thead>
+                    <tbody id="shipping-table-body"></tbody>
                 </table>
             </div>
         </section>
 
         <section class="admin-section">
             <h2 style="color:var(--accent-primary);">Hantera Butik (Produkter)</h2>
-            <p>Lägg till nya produkter. Bilden laddas upp automatiskt!</p>
             <div class="contact-form" style="margin-top: 1rem; margin-bottom: 2rem;">
                 <div class="form-group">
                     <label>Produktnamn</label>
-                    <input type="text" id="prod-name" placeholder="T.ex. 480 slots Top-loader binder">
+                    <input type="text" id="prod-name" placeholder="T.ex. 480 slots Top-loader">
+                </div>
+                <div class="form-group" style="display:flex; gap:1rem;">
+                    <div style="flex:1;">
+                        <label>Pris (kr)</label>
+                        <input type="number" id="prod-price" placeholder="T.ex. 360">
+                    </div>
+                    <div style="flex:1;">
+                        <label>Vikt (gram)</label>
+                        <input type="number" id="prod-weight" placeholder="T.ex. 500">
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>Pris (kr)</label>
-                    <input type="number" id="prod-price" placeholder="T.ex. 360">
-                </div>
-                <div class="form-group">
-                    <label>Produktbild (Välj från enhet)</label>
-                    <input type="file" id="prod-file" accept="image/*" style="padding: 0.5rem; background: transparent; border: none;">
+                    <label>Produktbild</label>
+                    <input type="file" id="prod-file" accept="image/*" style="padding: 0.5rem; border: none;">
                 </div>
                 <button id="add-product-btn" class="btn">Lägg till i butik</button>
-                <div id="prod-loading" class="loading">Laddar upp bild och sparar produkt... Vänligen vänta.</div>
+                <div id="prod-loading" class="loading">Laddar upp bild säkert... Vänligen vänta.</div>
             </div>
-
             <div style="overflow-x:auto;">
                 <table>
-                    <thead>
-                        <tr><th>Produkt</th><th>Pris</th><th>Åtgärd</th></tr>
-                    </thead>
+                    <thead><tr><th>Produkt</th><th>Vikt</th><th>Pris</th><th>Åtgärd</th></tr></thead>
                     <tbody id="products-table-body"></tbody>
                 </table>
             </div>
@@ -121,34 +116,17 @@
 
         <section class="admin-section">
             <h2 style="color:var(--accent-primary);">Hantera Projekt</h2>
-            
             <div class="contact-form" style="margin-bottom: 2rem; border-bottom: 1px solid #333; padding-bottom: 2rem;">
-                <h3>Skapa Nytt Projekt</h3>
-                <div class="form-group" style="margin-top: 1rem;">
-                    <label>Titel</label>
-                    <input type="text" id="proj-title" placeholder="T.ex. Hel-foliering Tesla Model 3">
-                </div>
-                <div class="form-group">
-                    <label>Beskrivning (Information om vad du gjort)</label>
-                    <textarea id="proj-desc" placeholder="Berätta om arbetet..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Huvudbild (Den som syns på startsidan)</label>
-                    <input type="file" id="proj-main-file" accept="image/*">
-                </div>
-                <div class="form-group">
-                    <label>Galleri (Välj 5-10 bilder för detaljsidan)</label>
-                    <input type="file" id="proj-gallery-files" accept="image/*" multiple>
-                </div>
+                <div class="form-group"><label>Titel</label><input type="text" id="proj-title"></div>
+                <div class="form-group"><label>Beskrivning</label><textarea id="proj-desc"></textarea></div>
+                <div class="form-group"><label>Huvudbild</label><input type="file" id="proj-main-file" accept="image/*"></div>
+                <div class="form-group"><label>Galleri</label><input type="file" id="proj-gallery-files" accept="image/*" multiple></div>
                 <button id="save-project-btn" class="btn">Ladda upp och Spara</button>
-                <div id="proj-status" style="margin-top:1rem; display:none;">Laddar upp bilder... detta kan ta en stund.</div>
+                <div id="proj-status" class="loading">Laddar upp bilder...</div>
             </div>
-
             <div style="overflow-x:auto;">
                 <table>
-                    <thead>
-                        <tr><th>Titel</th><th>Huvudbild</th><th>Åtgärd</th></tr>
-                    </thead>
+                    <thead><tr><th>Titel</th><th>Huvudbild</th><th>Åtgärd</th></tr></thead>
                     <tbody id="projects-table-body"></tbody>
                 </table>
             </div>
@@ -156,20 +134,11 @@
 
         <section class="admin-section">
             <h2 style="color:var(--accent-primary);">Hantera Egna Sidor / Flikar</h2>
-            <p>Skapa nya flikar i menyn. Använd redigeraren för att designa innehållet precis som i Word.</p>
-            
-            <div class="contact-form" style="margin-top: 1rem; margin-bottom: 2rem; border-bottom: 1px solid #333; padding-bottom: 2rem;">
-                <div class="form-group">
-                    <label>Flikens namn (syns i menyn)</label>
-                    <input type="text" id="page-title" placeholder="T.ex. Om Oss">
-                </div>
-                <div class="form-group">
-                    <label>Innehåll på sidan</label>
-                    <div id="editor-container" style="height: 300px; background: white; color: black; border-radius: 4px;"></div>
-                </div>
+            <div class="contact-form" style="margin-top: 1rem; border-bottom: 1px solid #333; padding-bottom: 2rem;">
+                <div class="form-group"><label>Flikens namn</label><input type="text" id="page-title"></div>
+                <div class="form-group"><label>Innehåll</label><div id="editor-container" style="height: 300px; background: white; color: black;"></div></div>
                 <button id="add-page-btn" class="btn" style="margin-top: 1rem;">Publicera Flik</button>
             </div>
-
             <div style="overflow-x:auto;">
                 <table>
                     <thead><tr><th>Titel</th><th>Åtgärd</th></tr></thead>
@@ -179,20 +148,19 @@
         </section>
 
         <section class="admin-section">
-            <h2 style="color:var(--accent-primary);">Assistans?</h2>
-            <div class="support-box">
-                <p>Behöver du hjälp med systemet, webbplatsen eller har du stött på ett problem?</p>
-                <p style="margin-top: 0.5rem; font-size: 1.1rem;">
-                    Du kan alltid nå William på <strong>010 473 41 97</strong>. <br>
-                    Ring numret och fråga bara efter William så löser vi det lugnt och tryggt.
-                </p>
+            <h2 style="color:var(--accent-primary);">Inkomna Beställningar (Swish)</h2>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead><tr><th>Beställning</th><th>Telefon</th><th>Datum</th><th>Status</th><th>Åtgärd</th></tr></thead>
+                    <tbody id="orders-table-body"></tbody>
+                </table>
             </div>
         </section>
     </main>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
-        // --- 1. SÄKER INLOGGNING (Dolt lösenord via backend) ---
+        // --- 1. SÄKER INLOGGNING ---
         async function checkLogin() {
             const pass = document.getElementById('admin-password').value;
             try {
@@ -201,16 +169,11 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ password: pass })
                 });
-                
                 if (res.ok) {
                     sessionStorage.setItem('admin_logged_in', 'true');
                     showAdminPanel();
-                } else {
-                    alert("Fel lösenord!");
-                }
-            } catch (err) {
-                alert("Kunde inte ansluta till inloggningsservern.");
-            }
+                } else alert("Fel lösenord!");
+            } catch (err) { alert("Kunde inte ansluta till servern."); }
         }
 
         function showAdminPanel() {
@@ -221,21 +184,14 @@
             loadProjects();
             loadHeroSlides();
             loadPages();
+            loadShippingRates(); // Ladda frakten
         }
 
-        if (sessionStorage.getItem('admin_logged_in') === 'true') {
-            showAdminPanel();
-        }
+        if (sessionStorage.getItem('admin_logged_in') === 'true') showAdminPanel();
 
-
-        // --- 2. SÄKER BILDUPPLADDNING VIA SERVER ---
+        // --- 2. SÄKER BILDUPPLADDNING ---
         async function uploadImageToImgBB(file) {
-            // Vercel har en gräns för hur mycket data man får skicka på en gång
-            if (file.size > 3.5 * 1024 * 1024) {
-                alert("Bilden är för stor (Max 3.5 MB). Vänligen beskära eller välj en mindre bild.");
-                throw new Error("För stor bild");
-            }
-
+            if (file.size > 3.5 * 1024 * 1024) throw new Error("Bilden är över 3.5MB. Minska storleken.");
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
@@ -247,104 +203,96 @@
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ imageBase64: base64Data })
                         });
-
                         const data = await response.json();
-                        if (response.ok && data.url) {
-                            resolve(data.url);
-                        } else {
-                            reject(new Error("Misslyckades ladda upp bild."));
-                        }
-                    } catch (err) {
-                        reject(err);
-                    }
+                        if (response.ok && data.url) resolve(data.url);
+                        else reject(new Error("Upload failed"));
+                    } catch (err) { reject(err); }
                 };
-                reader.onerror = () => reject(new Error("Kunde inte läsa in bilden."));
+                reader.onerror = () => reject(new Error("File error"));
             });
         }
 
-
-        // --- 3. BESTÄLLNINGAR ---
-        async function loadOrders() {
-            try {
-                const res = await fetch('/api/orders');
-                if(!res.ok) return;
-                const orders = await res.json();
-                const tbody = document.getElementById('orders-table-body');
-                tbody.innerHTML = '';
-                orders.forEach(o => {
-                    tbody.innerHTML += `<tr>
-                        <td>${o.service_name}</td><td>${o.customer_phone}</td>
-                        <td>${new Date(o.created_at).toLocaleDateString('sv-SE')}</td>
-                        <td><strong>${o.status}</strong></td>
-                        <td>${o.status !== 'Betald' ? `<button class="status-btn" onclick="markPaid(${o.id})">Markera Betald</button>` : 'Klar'}</td>
-                    </tr>`;
-                });
-            } catch (err) { console.error(err); }
+        // --- FRAKTKLASSER ---
+        async function loadShippingRates() {
+            const res = await fetch('/api/shipping');
+            const rates = await res.json();
+            const tbody = document.getElementById('shipping-table-body');
+            tbody.innerHTML = '';
+            rates.forEach(r => {
+                tbody.innerHTML += `<tr>
+                    <td>${r.min_weight}g - ${r.max_weight}g</td><td>${r.price} kr</td>
+                    <td><button class="delete-btn" onclick="deleteShipping(${r.id})">Ta bort</button></td>
+                </tr>`;
+            });
         }
 
-        async function markPaid(id) {
-            await fetch('/api/orders', { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id, status:'Betald'}) });
-            loadOrders();
+        document.getElementById('add-shipping-btn').addEventListener('click', async () => {
+            const min = document.getElementById('ship-min').value;
+            const max = document.getElementById('ship-max').value;
+            const price = document.getElementById('ship-price').value;
+            if(!min || !max || !price) return alert('Fyll i alla fält för fraktklassen.');
+            
+            await fetch('/api/shipping', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ min_weight: min, max_weight: max, price: price }) });
+            document.getElementById('ship-min').value = '';
+            document.getElementById('ship-max').value = '';
+            document.getElementById('ship-price').value = '';
+            loadShippingRates();
+        });
+
+        async function deleteShipping(id) {
+            if(confirm('Ta bort fraktklass?')) {
+                await fetch('/api/shipping', { method: 'DELETE', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id}) });
+                loadShippingRates();
+            }
         }
 
-
-        // --- 4. PRODUKTER ---
+        // --- PRODUKTER (MED VIKT) ---
         async function loadProducts() {
-            try {
-                const res = await fetch('/api/products');
-                if(!res.ok) return;
-                const prods = await res.json();
-                const tbody = document.getElementById('products-table-body');
-                tbody.innerHTML = '';
-                prods.forEach(p => {
-                    tbody.innerHTML += `<tr>
-                        <td>${p.name}</td><td>${p.price} kr</td>
-                        <td><button class="delete-btn" onclick="deleteProduct(${p.id})">Ta bort</button></td>
-                    </tr>`;
-                });
-            } catch (err) { console.error(err); }
+            const res = await fetch('/api/products');
+            const prods = await res.json();
+            const tbody = document.getElementById('products-table-body');
+            tbody.innerHTML = '';
+            prods.forEach(p => {
+                tbody.innerHTML += `<tr>
+                    <td>${p.name}</td><td>${p.weight || 0} g</td><td>${p.price} kr</td>
+                    <td><button class="delete-btn" onclick="deleteProduct(${p.id})">Ta bort</button></td>
+                </tr>`;
+            });
         }
 
         document.getElementById('add-product-btn').addEventListener('click', async () => {
             const name = document.getElementById('prod-name').value;
             const price = document.getElementById('prod-price').value;
+            const weight = document.getElementById('prod-weight').value;
             const fileInput = document.getElementById('prod-file');
             const loadingText = document.getElementById('prod-loading');
 
-            if(!name || !price || fileInput.files.length === 0) {
-                return alert('Vänligen fyll i namn, pris och välj en bild.');
-            }
+            if(!name || !price || fileInput.files.length === 0) return alert('Namn, pris och bild krävs.');
 
             loadingText.style.display = 'block';
-
             try {
                 const imageUrl = await uploadImageToImgBB(fileInput.files[0]);
                 await fetch('/api/products', { 
                     method: 'POST', 
                     headers: {'Content-Type':'application/json'}, 
-                    body: JSON.stringify({ name: name, price: price, image_url: imageUrl }) 
+                    body: JSON.stringify({ name: name, price: price, weight: weight || 0, image_url: imageUrl }) 
                 });
-
                 document.getElementById('prod-name').value = '';
                 document.getElementById('prod-price').value = '';
+                document.getElementById('prod-weight').value = '';
                 fileInput.value = '';
                 loadProducts();
-
-            } catch (err) {
-                alert('Något gick fel: ' + err.message);
-            } finally {
-                loadingText.style.display = 'none'; 
-            }
+            } catch (err) { alert(err.message); } finally { loadingText.style.display = 'none'; }
         });
 
         async function deleteProduct(id) {
-            if(confirm('Är du säker på att du vill ta bort produkten?')) {
+            if(confirm('Ta bort produkt?')) {
                 await fetch('/api/products', { method: 'DELETE', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id}) });
                 loadProducts();
             }
         }
 
-        // --- 5. PROJEKT ---
+        // --- PROJEKT ---
         document.getElementById('save-project-btn').addEventListener('click', async () => {
             const title = document.getElementById('proj-title').value;
             const desc = document.getElementById('proj-desc').value;
@@ -362,196 +310,138 @@
                     const url = await uploadImageToImgBB(file);
                     galleryUrls.push(url);
                 }
-
                 await fetch('/api/projects', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        title,
-                        description: desc,
-                        main_image: mainImageUrl,
-                        gallery: galleryUrls
-                    })
+                    body: JSON.stringify({ title, description: desc, main_image: mainImageUrl, gallery: galleryUrls })
                 });
-
                 alert("Projekt sparat!");
                 location.reload();
-            } catch (err) {
-                alert("Något gick fel!");
-            } finally {
-                status.style.display = "none";
-            }
+            } catch (err) { alert("Något gick fel!"); } finally { status.style.display = "none"; }
         });
 
         async function loadProjects() {
-            try {
-                const res = await fetch('/api/projects');
-                if(!res.ok) return;
-                const projects = await res.json();
-                const tbody = document.getElementById('projects-table-body');
-                tbody.innerHTML = '';
-                
-                projects.forEach(p => {
-                    const safeTitle = p.title ? p.title.replace(/'/g, "\\'") : '';
-                    const safeDesc = p.description ? p.description.replace(/'/g, "\\'") : '';
-                    
-                    tbody.innerHTML += `<tr>
-                        <td><strong>${p.title}</strong></td>
-                        <td><img src="${p.main_image}" style="width:70px; height:50px; object-fit:cover; border-radius:4px;"></td>
-                        <td>
-                            <button class="status-btn" style="margin-right: 0.5rem;" onclick="editProject(${p.id}, '${safeTitle}', '${safeDesc}')">Redigera</button>
-                            <button class="delete-btn" onclick="deleteProject(${p.id})">Ta bort</button>
-                        </td>
-                    </tr>`;
-                });
-            } catch (err) { console.error(err); }
+            const res = await fetch('/api/projects');
+            const projects = await res.json();
+            const tbody = document.getElementById('projects-table-body');
+            tbody.innerHTML = '';
+            projects.forEach(p => {
+                const safeTitle = p.title ? p.title.replace(/'/g, "\\'") : '';
+                const safeDesc = p.description ? p.description.replace(/'/g, "\\'") : '';
+                tbody.innerHTML += `<tr>
+                    <td><strong>${p.title}</strong></td>
+                    <td><img src="${p.main_image}" style="width:70px; height:50px; object-fit:cover; border-radius:4px;"></td>
+                    <td>
+                        <button class="status-btn" style="margin-right: 0.5rem;" onclick="editProject(${p.id}, '${safeTitle}', '${safeDesc}')">Redigera</button>
+                        <button class="delete-btn" onclick="deleteProject(${p.id})">Ta bort</button>
+                    </td>
+                </tr>`;
+            });
         }
 
         async function editProject(id, oldTitle, oldDesc) {
             const newTitle = prompt('Ändra titel:', oldTitle);
             if (newTitle === null) return; 
-
             const newDesc = prompt('Ändra beskrivning:', oldDesc);
             if (newDesc === null) return; 
-
-            try {
-                await fetch('/api/projects', { 
-                    method: 'PUT', 
-                    headers: {'Content-Type':'application/json'}, 
-                    body: JSON.stringify({ id: id, title: newTitle, description: newDesc }) 
-                });
-                loadProjects(); 
-            } catch (err) {
-                alert("Något gick fel vid uppdateringen.");
-            }
+            await fetch('/api/projects', { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ id: id, title: newTitle, description: newDesc }) });
+            loadProjects(); 
         }
 
         async function deleteProject(id) {
-            if(confirm('Är du säker på att du vill ta bort detta projekt permanent?')) {
-                try {
-                    await fetch('/api/projects', { 
-                        method: 'DELETE', 
-                        headers: {'Content-Type':'application/json'}, 
-                        body: JSON.stringify({id}) 
-                    });
-                    loadProjects(); 
-                } catch (err) {
-                    alert("Kunde inte ta bort projektet.");
-                }
+            if(confirm('Ta bort detta projekt?')) {
+                await fetch('/api/projects', { method: 'DELETE', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id}) });
+                loadProjects(); 
             }
         }
 
-        // --- 6. BILDSPEL (HERO) LOGIK ---
+        // --- BILDSPEL (HERO) ---
         async function loadHeroSlides() {
-            try {
-                const res = await fetch('/api/hero');
-                if(!res.ok) return;
-                const slides = await res.json();
-                const tbody = document.getElementById('hero-table-body');
-                tbody.innerHTML = '';
-                slides.forEach(s => {
-                    tbody.innerHTML += `<tr>
-                        <td><img src="${s.image_url}" style="width:120px; height:60px; object-fit:cover; border-radius:4px;"></td>
-                        <td><button class="delete-btn" onclick="deleteHeroSlide(${s.id})">Ta bort</button></td>
-                    </tr>`;
-                });
-            } catch (err) { console.error(err); }
-        }
-
-        const addHeroBtn = document.getElementById('add-hero-btn');
-        if (addHeroBtn) {
-            addHeroBtn.addEventListener('click', async () => {
-                const fileInput = document.getElementById('hero-file');
-                const loadingText = document.getElementById('hero-loading');
-                if(fileInput.files.length === 0) return alert('Vänligen välj en bild först.');
-
-                loadingText.style.display = 'block';
-                try {
-                    const imageUrl = await uploadImageToImgBB(fileInput.files[0]);
-                    await fetch('/api/hero', { 
-                        method: 'POST', 
-                        headers: {'Content-Type':'application/json'}, 
-                        body: JSON.stringify({ image_url: imageUrl }) 
-                    });
-                    fileInput.value = '';
-                    loadHeroSlides();
-                } catch (err) {
-                    alert('Något gick fel vid uppladdningen.');
-                } finally {
-                    loadingText.style.display = 'none';
-                }
+            const res = await fetch('/api/hero');
+            const slides = await res.json();
+            const tbody = document.getElementById('hero-table-body');
+            tbody.innerHTML = '';
+            slides.forEach(s => {
+                tbody.innerHTML += `<tr>
+                    <td><img src="${s.image_url}" style="width:120px; height:60px; object-fit:cover; border-radius:4px;"></td>
+                    <td><button class="delete-btn" onclick="deleteHeroSlide(${s.id})">Ta bort</button></td>
+                </tr>`;
             });
         }
 
+        document.getElementById('add-hero-btn').addEventListener('click', async () => {
+            const fileInput = document.getElementById('hero-file');
+            const loadingText = document.getElementById('hero-loading');
+            if(fileInput.files.length === 0) return alert('Välj en bild.');
+            loadingText.style.display = 'block';
+            try {
+                const imageUrl = await uploadImageToImgBB(fileInput.files[0]);
+                await fetch('/api/hero', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ image_url: imageUrl }) });
+                fileInput.value = '';
+                loadHeroSlides();
+            } catch (err) { alert(err.message); } finally { loadingText.style.display = 'none'; }
+        });
+
         async function deleteHeroSlide(id) {
-            if(confirm('Vill du ta bort denna bild från bildspelet?')) {
+            if(confirm('Ta bort bild från bildspelet?')) {
                 await fetch('/api/hero', { method: 'DELETE', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id}) });
                 loadHeroSlides();
             }
         }
 
-        // --- 7. EGNA SIDOR (QUILL CMS) LOGIK ---
+        // --- EGNA SIDOR (QUILL CMS) ---
         let quill = new Quill('#editor-container', {
             theme: 'snow',
-            modules: {
-                toolbar: [
-                    [{ 'header': [1, 2, 3, false] }],
-                    ['bold', 'italic', 'underline'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    ['clean']
-                ]
-            }
+            modules: { toolbar: [ [{ 'header': [1, 2, 3, false] }], ['bold', 'italic', 'underline'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['clean'] ] }
         });
 
         async function loadPages() {
-            try {
-                const res = await fetch('/api/pages');
-                if(!res.ok) return;
-                const pages = await res.json();
-                const tbody = document.getElementById('pages-table-body');
-                tbody.innerHTML = '';
-                pages.forEach(p => {
-                    tbody.innerHTML += `<tr>
-                        <td><strong>${p.title}</strong></td>
-                        <td><button class="delete-btn" onclick="deletePage(${p.id})">Ta bort</button></td>
-                    </tr>`;
-                });
-            } catch (err) { console.error(err); }
+            const res = await fetch('/api/pages');
+            const pages = await res.json();
+            const tbody = document.getElementById('pages-table-body');
+            tbody.innerHTML = '';
+            pages.forEach(p => {
+                tbody.innerHTML += `<tr><td><strong>${p.title}</strong></td><td><button class="delete-btn" onclick="deletePage(${p.id})">Ta bort</button></td></tr>`;
+            });
         }
 
         document.getElementById('add-page-btn').addEventListener('click', async () => {
             const title = document.getElementById('page-title').value;
             const content = quill.root.innerHTML; 
-
-            if(!title || quill.getText().trim().length === 0) return alert("Fyll i både namn och text!");
-
-            try {
-                await fetch('/api/pages', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ title, content })
-                });
-
-                document.getElementById('page-title').value = '';
-                quill.setContents([]);
-                loadPages();
-                alert("Sidan är skapad!");
-            } catch (err) {
-                alert("Något gick fel.");
-            }
+            if(!title || quill.getText().trim().length === 0) return alert("Fyll i fälten!");
+            await fetch('/api/pages', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ title, content }) });
+            document.getElementById('page-title').value = '';
+            quill.setContents([]);
+            loadPages();
         });
 
         async function deletePage(id) {
-            if(confirm('Vill du ta bort denna flik helt?')) {
-                await fetch('/api/pages', { 
-                    method: 'DELETE', 
-                    headers: {'Content-Type': 'application/json'}, 
-                    body: JSON.stringify({ id }) 
-                });
+            if(confirm('Vill du ta bort denna flik?')) {
+                await fetch('/api/pages', { method: 'DELETE', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ id }) });
                 loadPages();
             }
         }
 
+        // --- BESTÄLLNINGAR ---
+        async function loadOrders() {
+            const res = await fetch('/api/orders');
+            const orders = await res.json();
+            const tbody = document.getElementById('orders-table-body');
+            tbody.innerHTML = '';
+            orders.forEach(o => {
+                tbody.innerHTML += `<tr>
+                    <td>${o.service_name}</td><td>${o.customer_phone}</td>
+                    <td>${new Date(o.created_at).toLocaleDateString('sv-SE')}</td>
+                    <td><strong>${o.status}</strong></td>
+                    <td>${o.status !== 'Betald' ? `<button class="status-btn" onclick="markPaid(${o.id})">Markera Betald</button>` : 'Klar'}</td>
+                </tr>`;
+            });
+        }
+
+        async function markPaid(id) {
+            await fetch('/api/orders', { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify({id, status:'Betald'}) });
+            loadOrders();
+        }
     </script>
 </body>
 </html>
