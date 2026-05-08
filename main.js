@@ -14,11 +14,8 @@ function bindTabs() {
     const tabs = document.querySelectorAll('.nav-tab');
 
     tabs.forEach(tab => {
-        const newTab = tab.cloneNode(true);
-        tab.parentNode.replaceChild(newTab, tab);
-
-        newTab.addEventListener('click', (e) => {
-            const targetId = newTab.getAttribute('data-tab');
+        tab.addEventListener('click', (e) => {
+            const targetId = tab.getAttribute('data-tab');
             if (!targetId) return;
 
             e.preventDefault();
@@ -29,7 +26,7 @@ function bindTabs() {
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
             
-            newTab.classList.add('active');
+            tab.classList.add('active');
             const targetSection = document.getElementById(targetId);
             if (targetSection) targetSection.classList.add('active-tab');
 
@@ -303,41 +300,7 @@ async function fetchHeroSlides() {
     }
 }
 
-// --- Hämta Egna Sidor (CMS) ---
-async function fetchCustomPages() {
-    const container = document.getElementById('dynamic-pages-container');
-    const navLinksList = document.querySelector('.nav-links');
-    if (!container || !navLinksList) return;
 
-    try {
-        const res = await fetch('/api/pages');
-        if (res.ok) {
-            const pages = await res.json();
-            pages.forEach(page => {
-                const li = document.createElement('li');
-                li.innerHTML = `<a href="#${page.slug}" class="nav-tab" data-tab="${page.slug}">${page.title}</a>`;
-                navLinksList.appendChild(li);
-
-                const section = document.createElement('section');
-                section.id = page.slug;
-                section.className = 'tab-content';
-                section.innerHTML = `
-                    <h2 class="section-title">${page.title}</h2>
-                    <div class="custom-content" style="max-width:900px; margin:0 auto; padding: 0 1rem; line-height:1.7;">
-                        ${page.content}
-                    </div>
-                `;
-                container.appendChild(section);
-            });
-            // Re-bind tabs if pages were added
-            if (pages.length > 0) {
-                bindTabs();
-            }
-        }
-    } catch (err) { 
-        console.error("Kunde inte ladda egna sidor:", err); 
-    }
-}
 
 // Kör vid sidladdning
 document.addEventListener('DOMContentLoaded', () => {
@@ -355,7 +318,6 @@ document.addEventListener('DOMContentLoaded', () => {
     bindTabs(); 
     fetchShippingRates();
     fetchHeroSlides();
-    fetchCustomPages();
     fetchProducts();
     fetchProjects();
     

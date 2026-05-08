@@ -48,8 +48,6 @@
     </header>
 
     <main style="padding: 2rem 0;">
-        <div id="dynamic-pages-container"></div>
-
         <section id="hem" class="tab-content active-tab">
             <div class="hero" style="border-radius: 12px; margin: 0 5% 3rem 5%; min-height: 50vh; position: relative; overflow: hidden; padding: 0;">
                 <div id="hero-slides-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
@@ -113,17 +111,41 @@
         <section id="kontakt" class="fade-in appear" style="margin-top: 5rem; padding: 0 5%; margin-bottom: 5rem;">
             <h2 class="section-title">Kontakta Oss</h2>
             <div class="services-grid" style="grid-template-columns: 1fr;">
-                <div class="contact-info" style="max-width: 600px; margin: 0 auto; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 12px; text-align: center;">
-                    <h3 style="color: var(--accent-primary); margin-bottom: 2rem;">Vi är här för dig</h3>
-                    <div style="margin-bottom: 2rem;">
-                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; font-weight: bold;">E-POST</p>
-                        <p style="font-size: 1.3rem; font-weight: bold;"><a href="mailto:mtn_dekor@hotmail.com" style="color: var(--accent-primary); text-decoration: none;">mtn_dekor@hotmail.com</a></p>
+                <div class="contact-info" style="max-width: 700px; margin: 0 auto; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 12px;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 2rem; text-align: center;">Vi är här för dig</h3>
+                    
+                    <div style="margin-bottom: 2.5rem; text-align: center;">
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; font-weight: bold;">TELEFON</p>
+                        <p style="font-size: 1.3rem; font-weight: bold;"><a href="tel:0720189160" style="color: var(--accent-primary); text-decoration: none;">0720189160</a></p>
                     </div>
-                    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+
+                    <div style="margin-bottom: 2.5rem; text-align: center;">
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; font-weight: bold;">E-POST</p>
+                        <p style="font-size: 1.3rem; font-weight: bold;"><a href="mailto:Mtn_dekor@hotmail.com" style="color: var(--accent-primary); text-decoration: none;">Mtn_dekor@hotmail.com</a></p>
+                    </div>
+
+                    <div style="margin-bottom: 2.5rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
                         <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; text-transform: uppercase; font-weight: bold;">ADRESS</p>
                         <p style="line-height: 1.8; font-size: 1rem;">
-                            MTN DEKOR<br>
-                            <span style="color: var(--text-muted);">Vi serverar kunder över hela Sverige</span>
+                            <strong>MTN DEKOR</strong><br>
+                            Bladvägen 17<br>
+                            Olofström/Blekinge<br>
+                            293 42, Sverige
+                        </p>
+                    </div>
+
+                    <div style="margin-bottom: 2.5rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; text-transform: uppercase; font-weight: bold;">FÖLJ OSS</p>
+                        <div style="display: flex; justify-content: center; gap: 1.5rem;">
+                            <a href="https://www.facebook.com/p/Mtn-Dekor-61555332775951/?locale=sv_SE" target="_blank" style="color: var(--accent-primary); text-decoration: none; font-weight: bold;">Facebook</a>
+                            <a href="https://www.instagram.com/mtn.dekor/" target="_blank" style="color: var(--accent-primary); text-decoration: none; font-weight: bold;">Instagram</a>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0; text-transform: uppercase; font-weight: bold;">VÄVPLATS</p>
+                        <p style="font-size: 1rem; margin-top: 0.5rem;">
+                            <a href="https://www.mtndekor.com" target="_blank" style="color: var(--accent-primary); text-decoration: none;">mtndekor.com</a>
                         </p>
                     </div>
                 </div>
@@ -175,10 +197,46 @@
 
     <div id="cart-overlay" class="cart-overlay"></div>
 
-    <footer>
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem; padding: 2rem 5%;">
-            <p style="margin: 0;">&copy; 2026 MTN DEKOR. Alla rättigheter förbehållna.</p>
-            <a href="/admin.html" style="color: var(--accent-primary); text-decoration: none; font-weight: bold; font-size: 0.9rem;">Admin Panel →</a>
+    <footer style="border-top: 1px solid rgba(255,255,255,0.1); padding: 3rem 5%;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                <!-- Company Info -->
+                <div>
+                    <h4 style="color: var(--accent-primary); margin-bottom: 1rem; font-size: 1rem; text-transform: uppercase;">MTN DEKOR</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">Specialister inom Fordonsdesign och Optimeringstjänster</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">Bladvägen 17, Olofström/Blekinge<br>293 42, Sverige</p>
+                </div>
+                
+                <!-- Contact Info -->
+                <div>
+                    <h4 style="color: var(--accent-primary); margin-bottom: 1rem; font-size: 1rem; text-transform: uppercase;">KONTAKT</h4>
+                    <p style="margin: 0.5rem 0; font-size: 0.9rem;">
+                        <a href="tel:0720189160" style="color: var(--text-light); text-decoration: none;">Tel: 0720189160</a>
+                    </p>
+                    <p style="margin: 0.5rem 0; font-size: 0.9rem;">
+                        <a href="mailto:Mtn_dekor@hotmail.com" style="color: var(--text-light); text-decoration: none;">Email: Mtn_dekor@hotmail.com</a>
+                    </p>
+                    <p style="margin: 0.5rem 0; font-size: 0.9rem;">
+                        <a href="https://www.mtndekor.com" target="_blank" style="color: var(--text-light); text-decoration: none;">www.mtndekor.com</a>
+                    </p>
+                </div>
+
+                <!-- Social Media -->
+                <div>
+                    <h4 style="color: var(--accent-primary); margin-bottom: 1rem; font-size: 1rem; text-transform: uppercase;">FÖLJ OSS</h4>
+                    <p style="margin: 0.5rem 0; font-size: 0.9rem;">
+                        <a href="https://www.facebook.com/p/Mtn-Dekor-61555332775951/?locale=sv_SE" target="_blank" style="color: var(--text-light); text-decoration: none;">Facebook</a>
+                    </p>
+                    <p style="margin: 0.5rem 0; font-size: 0.9rem;">
+                        <a href="https://www.instagram.com/mtn.dekor/" target="_blank" style="color: var(--text-light); text-decoration: none;">Instagram</a>
+                    </p>
+                </div>
+            </div>
+
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">&copy; 2026 MTN DEKOR. Alla rättigheter förbehållna.</p>
+                <a href="/admin.html" style="color: var(--accent-primary); text-decoration: none; font-weight: bold; font-size: 0.9rem;">Admin Panel →</a>
+            </div>
         </div>
     </footer>
 
