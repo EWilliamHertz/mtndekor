@@ -162,6 +162,26 @@
             </div>
         </section>
 
+        <section class="admin-section">
+            <h2 style="color:var(--accent-primary);">Ändra Adminlösenord</h2>
+            <div class="contact-form" style="margin-bottom: 2rem;">
+                <div class="form-group">
+                    <label>Nuvarande lösenord</label>
+                    <input type="password" id="current-password" placeholder="Ange ditt nuvarande lösenord">
+                </div>
+                <div class="form-group">
+                    <label>Nytt lösenord</label>
+                    <input type="password" id="new-password" placeholder="Ange ditt nya lösenord">
+                </div>
+                <div class="form-group">
+                    <label>Bekräfta nytt lösenord</label>
+                    <input type="password" id="confirm-password" placeholder="Bekräfta det nya lösenordet">
+                </div>
+                <button id="change-password-btn" class="btn">Uppdatera lösenord</button>
+                <div id="password-status" class="loading"></div>
+            </div>
+        </section>
+
 
 
 
@@ -449,8 +469,64 @@
             }
         }
 
+        // --- PASSWORD MANAGEMENT ---
+        document.getElementById('change-password-btn').addEventListener('click', async () => {
+            const currentPwd = document.getElementById('current-password').value;
+            const newPwd = document.getElementById('new-password').value;
+            const confirmPwd = document.getElementById('confirm-password').value;
+            const statusDiv = document.getElementById('password-status');
 
+            if (!currentPwd || !newPwd || !confirmPwd) {
+                statusDiv.style.display = 'block';
+                statusDiv.style.color = '#dc3545';
+                statusDiv.innerHTML = 'Fyll i alla fälten.';
+                return;
+            }
 
+            if (newPwd !== confirmPwd) {
+                statusDiv.style.display = 'block';
+                statusDiv.style.color = '#dc3545';
+                statusDiv.innerHTML = 'De nya lösenorden matchar inte.';
+                return;
+            }
+
+            if (newPwd.length < 4) {
+                statusDiv.style.display = 'block';
+                statusDiv.style.color = '#dc3545';
+                statusDiv.innerHTML = 'Lösenordet måste vara minst 4 tecken långt.';
+                return;
+            }
+
+            try {
+                statusDiv.style.display = 'block';
+                statusDiv.style.color = 'var(--accent-primary)';
+                statusDiv.innerHTML = 'Uppdaterar lösenord...';
+
+                const res = await fetch('/api/password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ currentPassword: currentPwd, newPassword: newPwd })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    statusDiv.style.color = '#28a745';
+                    statusDiv.innerHTML = '✓ Lösenordet har uppdaterats framgångsrikt!';
+                    document.getElementById('current-password').value = '';
+                    document.getElementById('new-password').value = '';
+                    document.getElementById('confirm-password').value = '';
+                    setTimeout(() => statusDiv.style.display = 'none', 3000);
+                } else {
+                    statusDiv.style.color = '#dc3545';
+                    statusDiv.innerHTML = data.message || 'Kunde inte uppdatera lösenordet.';
+                }
+            } catch (err) {
+                statusDiv.style.display = 'block';
+                statusDiv.style.color = '#dc3545';
+                statusDiv.innerHTML = 'Serverfel: ' + err.message;
+            }
+        });
 
 
     </script>
