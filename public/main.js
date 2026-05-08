@@ -1,6 +1,8 @@
-// --- Mobilmeny Logik ---
+// ============================================================
+// MOBILMENY
+// ============================================================
 const hamburger = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links');
+const navLinks  = document.querySelector('.nav-links');
 
 if (hamburger) {
     hamburger.addEventListener('click', () => {
@@ -9,71 +11,72 @@ if (hamburger) {
     });
 }
 
-// --- Flik-navigering (Tabs) Logik ---
+// Close mobile menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (navLinks && navLinks.classList.contains('active')) {
+        if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+        }
+    }
+});
+
+// ============================================================
+// FLIK-NAVIGERING (TABS)
+// ============================================================
 function switchTab(tabId) {
-    // Hide all tabs
-    const allTabs = document.querySelectorAll('.tab-content');
-    allTabs.forEach(tab => tab.classList.remove('active-tab'));
-    
-    // Remove active class from all nav tabs
-    const allNavTabs = document.querySelectorAll('.nav-tab');
-    allNavTabs.forEach(tab => tab.classList.remove('active'));
-    
-    // Show the selected tab
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active-tab'));
+    document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+
     const selectedTab = document.getElementById(tabId);
-    if (selectedTab) {
-        selectedTab.classList.add('active-tab');
-    }
-    
-    // Mark the nav tab as active
+    if (selectedTab) selectedTab.classList.add('active-tab');
+
     const selectedNavTab = document.querySelector(`.nav-tab[data-tab="${tabId}"]`);
-    if (selectedNavTab) {
-        selectedNavTab.classList.add('active');
-    }
-    
+    if (selectedNavTab) selectedNavTab.classList.add('active');
+
     // Close mobile menu
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
     if (hamburger && navLinks) {
         hamburger.classList.remove('active');
         navLinks.classList.remove('active');
     }
-    
-    // Update URL
+
     window.history.pushState(null, null, `#${tabId}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Re-run animations for newly visible elements
+    setTimeout(() => triggerVisibleAnimations(), 100);
 }
 
+// Expose globally so onclick attributes in HTML can call it
+window.switchTab = switchTab;
+
 function bindTabs() {
-    const tabs = document.querySelectorAll('.nav-tab');
-    tabs.forEach(tab => {
+    document.querySelectorAll('.nav-tab').forEach(tab => {
         tab.addEventListener('click', (e) => {
             e.preventDefault();
             const targetId = tab.getAttribute('data-tab');
-            if (targetId) {
-                switchTab(targetId);
-            }
+            if (targetId) switchTab(targetId);
         });
     });
 }
 
-// Handle browser back/forward buttons
+// Browser back/forward
 window.addEventListener('popstate', () => {
     const hash = window.location.hash.replace('#', '');
-    if (hash && document.getElementById(hash)) {
-        switchTab(hash);
-    }
+    if (hash && document.getElementById(hash)) switchTab(hash);
 });
 
-// --- Kundvagn & Frakt Logik ---
-const modal = document.getElementById('swish-modal');
-const closeBtn = document.querySelector('.close-btn');
-
-const openCartBtn = document.getElementById('open-cart-btn');
+// ============================================================
+// KUNDVAGN & FRAKT
+// ============================================================
+const modal       = document.getElementById('swish-modal');
+const closeBtn    = document.querySelector('.close-btn');
+const openCartBtn  = document.getElementById('open-cart-btn');
 const closeCartBtn = document.getElementById('close-cart-btn');
-const cartSidebar = document.getElementById('cart-sidebar');
-const cartOverlay = document.getElementById('cart-overlay');
+const cartSidebar  = document.getElementById('cart-sidebar');
+const cartOverlay  = document.getElementById('cart-overlay');
 const cartItemsContainer = document.getElementById('cart-items');
-const checkoutBtn = document.getElementById('checkout-btn');
+const checkoutBtn  = document.getElementById('checkout-btn');
 
 let cart = [];
 let cartTotal = 0;
@@ -83,12 +86,12 @@ let currentShippingCost = 0;
 
 function toggleCart() {
     if (cartSidebar) cartSidebar.classList.toggle('open');
-    if (cartOverlay) cartOverlay.classList.toggle('show');
+    if (cartOverlay)  cartOverlay.classList.toggle('show');
 }
 
-if (openCartBtn) openCartBtn.addEventListener('click', toggleCart);
+if (openCartBtn)  openCartBtn.addEventListener('click', toggleCart);
 if (closeCartBtn) closeCartBtn.addEventListener('click', toggleCart);
-if (cartOverlay) cartOverlay.addEventListener('click', toggleCart);
+if (cartOverlay)  cartOverlay.addEventListener('click', toggleCart);
 
 async function fetchShippingRates() {
     try {
@@ -100,7 +103,7 @@ async function fetchShippingRates() {
 function updateCartUI() {
     if (!cartItemsContainer) return;
     cartItemsContainer.innerHTML = '';
-    cartTotal = 0;
+    cartTotal  = 0;
     cartWeight = 0;
 
     if (cart.length === 0) {
@@ -108,67 +111,51 @@ function updateCartUI() {
         currentShippingCost = 0;
     } else {
         cart.forEach((item, index) => {
-            cartTotal += parseInt(item.price);
+            cartTotal  += parseInt(item.price);
             cartWeight += parseInt(item.weight || 0);
-            
+
             const itemEl = document.createElement('div');
             itemEl.className = 'cart-item';
             itemEl.innerHTML = `
                 <div class="cart-item-info">
                     <h4>${item.name}</h4>
-                    <p>${item.price} kr <span style="font-size:0.8rem; color:#888;">(${item.weight || 0}g)</span></p>
+                    <p>${item.price} kr <span style="font-size:0.8rem;color:#888;">(${item.weight || 0}g)</span></p>
                 </div>
                 <button class="remove-item-btn" onclick="removeFromCart(${index})">Ta bort</button>
             `;
             cartItemsContainer.appendChild(itemEl);
         });
 
-        // Räkna ut frakt baserat på totalvikt
         currentShippingCost = 0;
         if (shippingRates.length > 0) {
-            const applicableRate = shippingRates.find(r => cartWeight >= r.min_weight && cartWeight <= r.max_weight);
-            if (applicableRate) {
-                currentShippingCost = applicableRate.price;
-            } else {
-                // Om vikten är över max, ta den dyraste frakten
-                currentShippingCost = shippingRates[shippingRates.length - 1].price;
-            }
+            const rate = shippingRates.find(r => cartWeight >= r.min_weight && cartWeight <= r.max_weight);
+            currentShippingCost = rate ? rate.price : shippingRates[shippingRates.length - 1].price;
         }
     }
 
-    if (document.getElementById('cart-subtotal')) document.getElementById('cart-subtotal').textContent = cartTotal;
-    if (document.getElementById('cart-weight')) document.getElementById('cart-weight').textContent = cartWeight;
-    if (document.getElementById('cart-shipping')) document.getElementById('cart-shipping').textContent = currentShippingCost;
-    if (document.getElementById('cart-total-price')) document.getElementById('cart-total-price').textContent = cartTotal + currentShippingCost;
-    if (document.getElementById('cart-badge')) document.getElementById('cart-badge').textContent = cart.length;
+    if (document.getElementById('cart-subtotal'))   document.getElementById('cart-subtotal').textContent   = cartTotal;
+    if (document.getElementById('cart-weight'))     document.getElementById('cart-weight').textContent     = cartWeight;
+    if (document.getElementById('cart-shipping'))   document.getElementById('cart-shipping').textContent   = currentShippingCost;
+    if (document.getElementById('cart-total-price'))document.getElementById('cart-total-price').textContent= cartTotal + currentShippingCost;
+    if (document.getElementById('cart-badge'))      document.getElementById('cart-badge').textContent      = cart.length;
 }
 
 function flyToCart(buttonEl, imageUrl) {
     const cartIcon = document.getElementById('open-cart-btn');
     if (!cartIcon) return;
-
-    const btnRect = buttonEl.getBoundingClientRect();
+    const btnRect  = buttonEl.getBoundingClientRect();
     const cartRect = cartIcon.getBoundingClientRect();
-
     const flyingImg = document.createElement('img');
     flyingImg.src = imageUrl;
     flyingImg.className = 'flying-img';
-    
-    flyingImg.style.width = '60px';
-    flyingImg.style.height = '60px';
-    flyingImg.style.left = `${btnRect.left + btnRect.width / 2 - 30}px`;
-    flyingImg.style.top = `${btnRect.top + btnRect.height / 2 - 30}px`;
-    
+    flyingImg.style.cssText = `width:60px;height:60px;left:${btnRect.left + btnRect.width/2 - 30}px;top:${btnRect.top + btnRect.height/2 - 30}px;`;
     document.body.appendChild(flyingImg);
-
     void flyingImg.offsetWidth;
-
-    flyingImg.style.left = `${cartRect.left + cartRect.width / 2 - 10}px`;
-    flyingImg.style.top = `${cartRect.top + cartRect.height / 2 - 10}px`;
-    flyingImg.style.width = '20px';
-    flyingImg.style.height = '20px';
+    flyingImg.style.left    = `${cartRect.left + cartRect.width/2 - 10}px`;
+    flyingImg.style.top     = `${cartRect.top  + cartRect.height/2 - 10}px`;
+    flyingImg.style.width   = '20px';
+    flyingImg.style.height  = '20px';
     flyingImg.style.opacity = '0.1';
-
     setTimeout(() => {
         flyingImg.remove();
         cartIcon.classList.add('cart-bounce');
@@ -187,162 +174,184 @@ window.removeFromCart = function(index) {
     updateCartUI();
 };
 
-// --- Starta Stripe Checkout ---
+// Stripe checkout
 if (checkoutBtn) {
     checkoutBtn.addEventListener('click', async () => {
-        if (cart.length === 0) return alert("Varukorgen är tom!");
-
+        if (cart.length === 0) return alert('Varukorgen är tom!');
         checkoutBtn.textContent = 'Laddar säker kassa...';
-        checkoutBtn.disabled = true;
-
+        checkoutBtn.disabled    = true;
         try {
             const response = await fetch('/api/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ cartItems: cart, shippingCost: currentShippingCost })
             });
-
             const data = await response.json();
-
             if (response.ok && data.url) {
                 window.location.href = data.url;
             } else {
-                alert("Kunde inte starta betalningen: " + (data.error || "Okänt fel"));
+                alert('Kunde inte starta betalningen: ' + (data.error || 'Okänt fel'));
                 checkoutBtn.textContent = 'Gå till kassan (Stripe)';
-                checkoutBtn.disabled = false;
+                checkoutBtn.disabled    = false;
             }
-        } catch (error) {
-            alert("Kunde inte ansluta till servern.");
+        } catch(err) {
+            alert('Kunde inte ansluta till servern.');
             checkoutBtn.textContent = 'Gå till kassan (Stripe)';
-            checkoutBtn.disabled = false;
+            checkoutBtn.disabled    = false;
         }
     });
 }
 
-// --- Hämta och visa Produkter ---
+// ============================================================
+// HÄMTA PRODUKTER
+// ============================================================
 async function fetchProducts() {
     const shopGrid = document.getElementById('dynamic-shop-grid');
     if (!shopGrid) return;
-
     try {
         const res = await fetch('/api/products');
-        if (!res.ok) throw new Error("Gick inte att hämta produkter");
-        
+        if (!res.ok) throw new Error('Gick inte att hämta produkter');
         const products = await res.json();
-        shopGrid.innerHTML = ''; 
-
+        shopGrid.innerHTML = '';
         products.forEach(prod => {
             const card = document.createElement('div');
             card.className = 'service-card fade-in appear';
             const safeName = prod.name ? prod.name.replace(/'/g, "\\'") : '';
             card.innerHTML = `
-                <img src="${prod.image_url}" alt="${prod.name}" loading="lazy" style="width:100%; height:250px; object-fit:cover; border-radius:8px; margin-bottom:1rem;">
+                <img src="${prod.image_url}" alt="${prod.name}" loading="lazy" style="width:100%;height:250px;object-fit:cover;border-radius:8px;margin-bottom:1rem;">
                 <h3>${prod.name}</h3>
-                <p style="font-size:1.4rem; color:var(--accent-primary); font-weight:bold; margin-bottom:1rem;">${prod.price} kr</p>
-                <button class="btn buy-btn" onclick="addToCart(event, '${safeName}', ${prod.price}, '${prod.image_url}', ${prod.weight || 0})">Lägg i varukorg</button>
+                <p style="font-size:1.4rem;color:var(--accent-primary);font-weight:bold;margin-bottom:1rem;">${prod.price} kr</p>
+                <button class="btn buy-btn" onclick="addToCart(event,'${safeName}',${prod.price},'${prod.image_url}',${prod.weight||0})">Lägg i varukorg</button>
             `;
             shopGrid.appendChild(card);
         });
-    } catch (err) {
-        console.error("Kunde inte ladda produkter:", err);
-    }
+    } catch(err) { console.error('Kunde inte ladda produkter:', err); }
 }
 
-// --- Hämta och visa Projekt ---
+// ============================================================
+// HÄMTA PROJEKT
+// ============================================================
 async function fetchProjects() {
-    const projectGallery = document.getElementById('dynamic-project-gallery');
-    if (!projectGallery) return;
+    const projektGallery = document.getElementById('dynamic-project-gallery');
+    const hemGallery     = document.getElementById('dynamic-project-gallery-home');
 
     try {
-        const res = await fetch('/api/projects');
+        const res      = await fetch('/api/projects');
         const projects = await res.json();
-        projectGallery.innerHTML = '';
 
-        projects.forEach(proj => {
+        function buildProjectCard(proj) {
             const card = document.createElement('div');
             card.className = 'service-card fade-in appear';
             card.style.cursor = 'pointer';
             card.onclick = () => window.location.href = `/project.html?id=${proj.id}`;
-            
             card.innerHTML = `
-                <img src="${proj.main_image}" alt="${proj.title}" loading="lazy" style="width:100%; height:250px; object-fit:cover; border-radius:8px; margin-bottom:1rem;">
+                <img src="${proj.main_image}" alt="${proj.title}" loading="lazy" style="width:100%;height:250px;object-fit:cover;border-radius:8px;margin-bottom:1rem;">
                 <h3 style="color:var(--accent-primary);">${proj.title}</h3>
-                <p style="color:var(--text-muted); font-size:0.9rem;">${proj.description ? proj.description.substring(0, 80) + '...' : ''}</p>
-                <p style="margin-top:1rem; font-weight:bold; font-size:0.8rem; text-transform:uppercase;">Läs mer →</p>
+                <p style="color:var(--text-muted);font-size:0.9rem;">${proj.description ? proj.description.substring(0,80) + '...' : ''}</p>
+                <p style="margin-top:1rem;font-weight:bold;font-size:0.8rem;text-transform:uppercase;">Läs mer &rarr;</p>
             `;
-            projectGallery.appendChild(card);
-        });
-    } catch (err) {
-        console.error("Kunde inte ladda projekt:", err);
-    }
+            return card;
+        }
+
+        // Full projects page
+        if (projektGallery) {
+            projektGallery.innerHTML = '';
+            projects.forEach(proj => projektGallery.appendChild(buildProjectCard(proj)));
+        }
+
+        // Home preview (max 3)
+        if (hemGallery) {
+            hemGallery.innerHTML = '';
+            projects.slice(0, 3).forEach(proj => hemGallery.appendChild(buildProjectCard(proj)));
+        }
+    } catch(err) { console.error('Kunde inte ladda projekt:', err); }
 }
 
-// --- Hämta Bildspel ---
+// ============================================================
+// HERO BILDSPEL
+// ============================================================
 async function fetchHeroSlides() {
     const container = document.getElementById('hero-slides-container');
     if (!container) return;
-
     try {
         const res = await fetch('/api/hero');
         if (!res.ok) return;
         const slides = await res.json();
 
         if (slides.length === 0) {
-            container.innerHTML = `<div class="hero-slide active" style="background-color: #121212;"></div>`;
+            container.innerHTML = `<div class="hero-slide active" style="background-color:#121212;"></div>`;
             return;
         }
 
-        container.innerHTML = slides.map((slide, index) => `
-            <div class="hero-slide ${index === 0 ? 'active' : ''}" style="background-image: url('${slide.image_url}'); background-size: cover; background-position: center;"></div>
+        container.innerHTML = slides.map((slide, i) => `
+            <div class="hero-slide ${i === 0 ? 'active' : ''}"
+                 style="background-image:url('${slide.image_url}');background-size:cover;background-position:center;"></div>
         `).join('');
 
         if (slides.length > 1) {
             let currentIndex = 0;
-            const slideElements = container.querySelectorAll('.hero-slide');
+            const slideEls = container.querySelectorAll('.hero-slide');
             setInterval(() => {
-                slideElements[currentIndex].classList.remove('active');
-                currentIndex = (currentIndex + 1) % slideElements.length;
-                slideElements[currentIndex].classList.add('active');
-            }, 5000); 
+                slideEls[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % slideEls.length;
+                slideEls[currentIndex].classList.add('active');
+            }, 5000);
         }
-    } catch (err) {
-        console.error("Kunde inte ladda bildspel:", err);
-    }
+    } catch(err) { console.error('Kunde inte ladda bildspel:', err); }
 }
 
+// ============================================================
+// SCROLL ANIMATIONS (IntersectionObserver)
+// ============================================================
+function triggerVisibleAnimations() {
+    const options = { threshold: 0.12, rootMargin: '0px 0px -40px 0px' };
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('appear');
+            obs.unobserve(entry.target);
+        });
+    }, options);
 
+    const targets = document.querySelectorAll(
+        '.fade-in:not(.appear), .fade-in-section:not(.appear), .service-card:not(.appear), .testimonial-card:not(.appear)'
+    );
+    targets.forEach(el => observer.observe(el));
+}
 
-// Kör vid sidladdning
+// ============================================================
+// INITIERING
+// ============================================================
 document.addEventListener('DOMContentLoaded', () => {
-    
+    // Handle Stripe redirects
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('success')) {
-        alert("Tack för din beställning! Betalningen är genomförd.");
+        alert('Tack för din beställning! Betalningen är genomförd.');
         window.history.replaceState(null, '', window.location.pathname);
     }
     if (urlParams.get('canceled')) {
-        alert("Betalningen avbröts. Din varukorg finns kvar om du vill försöka igen.");
+        alert('Betalningen avbröts. Din varukorg finns kvar om du vill försöka igen.');
         window.history.replaceState(null, '', window.location.pathname);
     }
 
-    bindTabs(); 
+    // Initialise tab from URL hash
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById(hash)) {
+        switchTab(hash);
+    }
+
+    bindTabs();
     fetchShippingRates();
     fetchHeroSlides();
     fetchProducts();
     fetchProjects();
-    
-    const appearOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
-    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
-        entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            entry.target.classList.add('appear');
-            observer.unobserve(entry.target);
-        });
-    }, appearOptions);
 
-    const faders = document.querySelectorAll('.service-card, .section-title');
-    faders.forEach(fader => {
-        fader.classList.add('fade-in');
-        appearOnScroll.observe(fader);
+    // Run animations
+    triggerVisibleAnimations();
+
+    // Also add fade-in class to section titles dynamically
+    document.querySelectorAll('.section-title').forEach(el => {
+        if (!el.classList.contains('fade-in')) el.classList.add('fade-in');
     });
+    triggerVisibleAnimations();
 });

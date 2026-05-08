@@ -3,18 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>MTN DEKOR | Fordonsdesign & Optimering</title>
-    <meta name="description" content="MTN DEKOR är specialister inom fordonsdesign, foliering och optimeringstjänster. Vi förvandlar ditt fordon med högsta kvalitet och precision.">
-    <meta name="keywords" content="fordonsdekor, foliering, bildekor, bilfoliering, optimering, mtn dekor, stenskottsfilm, chrome delete">
+
+    <title>MTN DEKOR | Fordonsdesign &amp; Optimering – Olofström, Blekinge</title>
+    <meta name="description" content="MTN DEKOR är specialister inom fordonsdesign, foliering, stenskottsfilm, solfilm och motoroptimering i Olofström, Blekinge. Kontakta oss idag!">
+    <meta name="keywords" content="fordonsdekor, foliering, bildekor, bilfoliering, optimering, mtn dekor, stenskottsfilm, solfilm, chrome delete, Olofström, Blekinge">
     <meta name="author" content="MTN DEKOR">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mtndekor.vercel.app/">
 
     <link rel="icon" href="https://static.wixstatic.com/media/f3e2b9_77b448bbf6024f3d95d6aa7b8bddfe30~mv2.png" type="image/png">
 
-    <meta property="og:title" content="MTN DEKOR | Fordonsdesign & Optimering">
-    <meta property="og:description" content="Specialister inom fordonsdesign och optimeringstjänster.">
+    <!-- Open Graph -->
+    <meta property="og:title" content="MTN DEKOR | Fordonsdesign &amp; Optimering">
+    <meta property="og:description" content="Specialister inom fordonsdesign, foliering, stenskottsfilm och motoroptimering i Olofström, Blekinge. Förvandla ditt fordon med oss!">
     <meta property="og:image" content="https://static.wixstatic.com/media/f3e2b9_77b448bbf6024f3d95d6aa7b8bddfe30~mv2.png">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mtndekor.vercel.app/">
+    <meta property="og:locale" content="sv_SE">
+    <meta property="og:site_name" content="MTN DEKOR">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MTN DEKOR | Fordonsdesign &amp; Optimering">
+    <meta name="twitter:description" content="Specialister inom fordonsdesign, foliering och optimeringstjänster i Olofström, Blekinge.">
+    <meta name="twitter:image" content="https://static.wixstatic.com/media/f3e2b9_77b448bbf6024f3d95d6aa7b8bddfe30~mv2.png">
+
+    <!-- Schema.org Local Business -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "MTN DEKOR",
+      "description": "Specialister inom Fordonsdesign och Optimeringstjänster",
+      "url": "https://mtndekor.vercel.app/",
+      "telephone": "+46720189160",
+      "email": "Mtn_dekor@hotmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Bladvägen 17",
+        "addressLocality": "Olofström",
+        "addressRegion": "Blekinge",
+        "postalCode": "293 42",
+        "addressCountry": "SE"
+      },
+      "sameAs": [
+        "https://www.facebook.com/p/Mtn-Dekor-61555332775951/",
+        "https://www.instagram.com/mtn.dekor/"
+      ]
+    }
+    </script>
 
     <link rel="stylesheet" href="/style.css">
 </head>
@@ -29,6 +66,8 @@
                 <li><a href="#tjanster" class="nav-tab" data-tab="tjanster">Tjänster</a></li>
                 <li><a href="#butik" class="nav-tab" data-tab="butik">Butik</a></li>
                 <li><a href="#projekt" class="nav-tab" data-tab="projekt">Projekt</a></li>
+                <li><a href="#om-oss" class="nav-tab" data-tab="om-oss">Om Oss</a></li>
+                <li><a href="#kontakt" class="nav-tab" data-tab="kontakt">Kontakt</a></li>
             </ul>
             <div class="cart-icon-container" id="open-cart-btn" style="cursor: pointer; position: relative; margin-right: 1rem;">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text-light)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -48,36 +87,44 @@
     </header>
 
     <main style="padding: 2rem 0;">
+
+        <!-- ===== HEM ===== -->
         <section id="hem" class="tab-content active-tab">
-            <div class="hero" style="border-radius: 12px; margin: 0 5% 3rem 5%; min-height: 50vh; position: relative; overflow: hidden; padding: 0;">
-                <div id="hero-slides-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
-                </div>
-                <div style="position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; background: rgba(0,0,0,0.5); border-radius: 12px;">
-                    <h1>MTN DEKOR</h1>
-                    <p>Specialister inom Fordonsdesign och Optimeringstjänster</p>
+
+            <!-- Hero Slideshow -->
+            <div class="hero" style="border-radius: 12px; margin: 0 5% 3rem 5%; min-height: 55vh; position: relative; overflow: hidden; padding: 0;">
+                <div id="hero-slides-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
+                <div class="hero-overlay" style="position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 55vh; width: 100%; background: rgba(0,0,0,0.52); border-radius: 12px; padding: 4rem 2rem; text-align: center;">
+                    <h1 style="font-size: 3.5rem; letter-spacing: 2px; margin-bottom: 1rem;">MTN DEKOR</h1>
+                    <p style="font-size: 1.3rem; color: var(--text-muted); margin-bottom: 2.5rem; max-width: 600px;">Specialister inom Fordonsdesign och Optimeringstjänster</p>
+                    <button class="btn hero-cta-btn" onclick="switchTab('kontakt')">Kontakta Oss &rarr;</button>
                 </div>
             </div>
 
-            <div style="max-width: 900px; margin: 0 auto; padding: 0 5%; margin-bottom: 4rem; fade-in appear;">
-                <h2 style="text-align: center; font-size: 2rem; margin-bottom: 2rem; color: var(--accent-primary);">Välkommen till MTN DEKOR</h2>
-                <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-light); text-align: center; margin-bottom: 2rem;">
+            <!-- Welcome text -->
+            <div class="fade-in-section" style="max-width: 900px; margin: 0 auto; padding: 0 5%; margin-bottom: 4rem; text-align: center;">
+                <h2 style="font-size: 2rem; margin-bottom: 1.5rem; color: var(--accent-primary);">Välkommen till MTN DEKOR</h2>
+                <p style="font-size: 1.1rem; line-height: 1.9; color: var(--text-light);">
                     Vi är passionerade specialister inom fordonsdesign och optimeringstjänster. Med fokus på precision, kvalitet och attention to detail förvandlar vi fordon till unika konstverk som reflekterar din stil och personlighet.
                 </p>
             </div>
 
-            <div style="max-width: 1000px; margin: 0 auto; padding: 0 5%; margin-bottom: 4rem;">
-                <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 3rem; color: var(--accent-primary);">Genomförda Projekt</h2>
+            <!-- Project preview on Hem -->
+            <div class="fade-in-section" style="max-width: 1000px; margin: 0 auto; padding: 0 5%; margin-bottom: 4rem;">
+                <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 1rem; color: var(--accent-primary);">Genomförda Projekt</h2>
                 <p style="text-align: center; color: var(--text-muted); margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
-                    Vi är stolta över att kunna presentera ett urval av våra genomförda projekt. Varje arbete är unikt och reflekterar vår passion för design och detaljer. Vårt mål är att förvandla visioner till verklighet och skapa inspirerande resultat som våra kunder kan njuta av.
-I den nästa fliken kan ni se en rad utav lyckade resultat, vill du bli nästa kund som tar hem lyckan?
+                    Vi är stolta över att kunna presentera ett urval av våra genomförda projekt. Varje arbete är unikt och reflekterar vår passion för design och detaljer.
                 </p>
-                <div class="services-grid fade-in" id="dynamic-project-gallery-home" style="margin-bottom: 3rem;">
+                <div class="services-grid" id="dynamic-project-gallery-home" style="margin-bottom: 2rem;"></div>
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <button class="btn" onclick="switchTab('projekt')" style="background: transparent; border: 2px solid var(--accent-primary); color: var(--accent-primary);">Se alla projekt &rarr;</button>
                 </div>
             </div>
 
-            <div style="max-width: 1000px; margin: 0 auto; padding: 0 5%; margin-bottom: 4rem;">
-                <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 3rem; color: var(--accent-primary);"></h2>
-                <div class="services-grid fade-in">
+            <!-- Services overview -->
+            <div class="fade-in-section" style="max-width: 1000px; margin: 0 auto; padding: 0 5%; margin-bottom: 4rem;">
+                <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 3rem; color: var(--accent-primary);">Våra Tjänster</h2>
+                <div class="services-grid">
                     <div class="service-card">
                         <h3>🎬 Stenskottsfilm</h3>
                         <p>Skydda ditt fordons lack med professionell stenskottsfilm. Komplett skydd mot stenskott, repor, UV-blekning och slitage.</p>
@@ -95,33 +142,57 @@ I den nästa fliken kan ni se en rad utav lyckade resultat, vill du bli nästa k
                         <p>Hel- och delfolieringar med lackliknande finish. Vi förvandlar fordon till unika konstverk.</p>
                     </div>
                 </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn" onclick="switchTab('tjanster')" style="background: transparent; border: 2px solid var(--accent-primary); color: var(--accent-primary);">Läs mer om våra tjänster &rarr;</button>
+                </div>
             </div>
+
+            <!-- Testimonials -->
+            <div class="fade-in-section" style="max-width: 1100px; margin: 0 auto; padding: 0 5%; margin-bottom: 5rem;">
+                <h2 style="text-align: center; font-size: 1.8rem; margin-bottom: 3rem; color: var(--accent-primary);">Vad Våra Kunder Säger</h2>
+                <div class="services-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-stars">★★★★★</div>
+                        <p class="testimonial-text">"Fantastiskt arbete med folieringen på min BMW. Resultatet överträffade alla mina förväntningar – ser ut som en helt ny bil!"</p>
+                        <p class="testimonial-author">— Andreas K.</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-stars">★★★★★</div>
+                        <p class="testimonial-text">"Professionellt, snabbt och till ett bra pris. Stenskottsfilmen är knappt synlig och bilen är nu skyddad för framtiden."</p>
+                        <p class="testimonial-author">— Sara M.</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-stars">★★★★★</div>
+                        <p class="testimonial-text">"Motoroptimeringen gav en märkbar skillnad – mer kraft och bättre bränsleekonomi. Rekommenderar varmt MTN DEKOR!"</p>
+                        <p class="testimonial-author">— Mikael L.</p>
+                    </div>
+                </div>
+            </div>
+
         </section>
 
+        <!-- ===== TJÄNSTER ===== -->
         <section id="tjanster" class="tab-content">
             <h2 class="section-title fade-in">Tjänster Vi Erbjuder</h2>
-            
+
             <div style="max-width: 1200px; margin: 0 auto; padding: 0 5%;">
-                <!-- Service 1: Stenskottsfilm -->
-                <div style="margin-bottom: 4rem; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 12px; fade-in appear;">
+                <div class="service-detail-card fade-in-section">
                     <h3 style="font-size: 1.5rem; color: var(--accent-primary); margin-bottom: 1rem;">🎬 Stenskottsfilm</h3>
-                    <p style="line-height: 1.8; color: var(--text-light); font-size: 1.05rem;">
+                    <p style="line-height: 1.9; color: var(--text-light); font-size: 1.05rem;">
                         Stenskottfolie ger ditt fordons lack ett komplett skydd mot stenskott, repor, UV-blekning och slitage. Till skillnad från keramiska behandlingar, som kan vara sköra, är folien praktiskt osynlig och blockerar effektivt skador. Med stenskottfolie slipper du oro för rost och repor—håll din bil i toppskick!
                     </p>
                 </div>
 
-                <!-- Service 2: Solfilm -->
-                <div style="margin-bottom: 4rem; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 12px; fade-in appear;">
+                <div class="service-detail-card fade-in-section">
                     <h3 style="font-size: 1.5rem; color: var(--accent-primary); margin-bottom: 1rem;">☀️ Solfilm</h3>
-                    <p style="line-height: 1.8; color: var(--text-light); font-size: 1.05rem;">
+                    <p style="line-height: 1.9; color: var(--text-light); font-size: 1.05rem;">
                         Solfilm ger skydd mot UV-strålning, minskar invendig värme och ökar integriteten i bilen. Den bidrar till mer behaglig körning och skyddar interiören från blekning. Investera i solfilm för en snyggare och mer komfortabel bil med MTN Dekor!
                     </p>
                 </div>
 
-                <!-- Service 3: Optimering -->
-                <div style="margin-bottom: 4rem; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 12px; fade-in appear;">
+                <div class="service-detail-card fade-in-section">
                     <h3 style="font-size: 1.5rem; color: var(--accent-primary); margin-bottom: 1.5rem;">⚙️ Motoroptimering</h3>
-                    <p style="line-height: 1.8; color: var(--text-light); font-size: 1.05rem; margin-bottom: 1.5rem;">
+                    <p style="line-height: 1.9; color: var(--text-light); font-size: 1.05rem; margin-bottom: 1.5rem;">
                         Att optimera din bil är ett steg mot att få ut det mesta av din körupplevelse och skydda din investering.
                     </p>
                     <div style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 8px;">
@@ -133,80 +204,155 @@ I den nästa fliken kan ni se en rad utav lyckade resultat, vill du bli nästa k
                     </div>
                 </div>
 
-                <!-- Service 4: Foliering -->
-                <div style="margin-bottom: 4rem; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 12px; fade-in appear;">
+                <div class="service-detail-card fade-in-section">
                     <h3 style="font-size: 1.5rem; color: var(--accent-primary); margin-bottom: 1rem;">🎨 Fordonsfoliering</h3>
-                    <p style="line-height: 1.8; color: var(--text-light); font-size: 1.05rem;">
+                    <p style="line-height: 1.9; color: var(--text-light); font-size: 1.05rem;">
                         MTN Dekor är experter på foliering av bilar, lastbilar, båtar och andra fordon. Vi betraktar foliering som ett hantverk snarare än enbart marknadsföring. Med fokus på precision och en lackliknande finish erbjuder vi hel- och delfolieringar samt anpassade dekaler. Våra nöjda kunder vittnar om vår förmåga att förvandla fordon till unika konstverk.
                     </p>
+                </div>
+
+                <div style="text-align: center; margin: 3rem 0 5rem;">
+                    <button class="btn" onclick="switchTab('kontakt')">Boka en tid &rarr;</button>
                 </div>
             </div>
         </section>
 
+        <!-- ===== BUTIK ===== -->
         <section id="butik" class="tab-content">
             <h2 class="section-title fade-in">Vår Butik</h2>
-            <div class="services-grid" id="dynamic-shop-grid">
-                </div>
+            <div class="services-grid" id="dynamic-shop-grid"></div>
         </section>
 
+        <!-- ===== PROJEKT ===== -->
         <section id="projekt" class="tab-content">
             <h2 class="section-title fade-in">Våra Projekt</h2>
-            <div class="services-grid" id="dynamic-project-gallery">
-                </div>
+            <div class="services-grid" id="dynamic-project-gallery"></div>
         </section>
 
-        <section id="kontakt" class="fade-in appear" style="margin-top: 5rem; padding: 0 5%; margin-bottom: 5rem;">
-            <h2 class="section-title">Kontakta Oss</h2>
-            <div class="services-grid" style="grid-template-columns: 1fr;">
-                <div class="contact-info" style="max-width: 700px; margin: 0 auto; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 12px;">
-                    <h3 style="color: var(--accent-primary); margin-bottom: 2rem; text-align: center;">Vi är här för dig</h3>
-                    
-                    <div style="margin-bottom: 2.5rem; text-align: center;">
-                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; font-weight: bold;">TELEFON</p>
-                        <p style="font-size: 1.3rem; font-weight: bold;"><a href="tel:0720189160" style="color: var(--accent-primary); text-decoration: none;">0720189160</a></p>
+        <!-- ===== OM OSS ===== -->
+        <section id="om-oss" class="tab-content">
+            <h2 class="section-title fade-in">Om Oss</h2>
+
+            <div style="max-width: 900px; margin: 0 auto; padding: 0 5% 5rem;">
+
+                <!-- Founder profile -->
+                <div class="fade-in-section" style="text-align: center; margin-bottom: 4rem;">
+                    <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover)); display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; font-size: 3.5rem; box-shadow: 0 8px 30px rgba(212,175,55,0.3);">🚗</div>
+                    <h3 style="font-size: 2rem; color: var(--accent-primary); margin-bottom: 0.5rem;">Mertcan Okusluk</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 3px;">Grundare &amp; Fordonsspecialist</p>
+                </div>
+
+                <!-- Story -->
+                <div class="fade-in-section" style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 2.5rem; margin-bottom: 3rem; border-left: 4px solid var(--accent-primary);">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 1.5rem; font-size: 1.3rem;">Passionen bakom MTN DEKOR</h3>
+                    <p style="line-height: 1.9; color: var(--text-light); font-size: 1.05rem; margin-bottom: 1.5rem;">
+                        Bakom MTN DEKOR finns Mertcan Okusluk – en passionerad fordonsdesigner med ett brinnande intresse för bilar och fordon. Sedan tidig ålder har fordon fångat hans fascination; inte bara som transportmedel, utan som konstverk med potential att uttrycka personlighet och stil.
+                    </p>
+                    <p style="line-height: 1.9; color: var(--text-light); font-size: 1.05rem; margin-bottom: 1.5rem;">
+                        Med åren förvärvade Mertcan gedigen kunskap och erfarenhet inom fordonsfoliering, stenskottsfilm, solfilm och motoroptimering. Han grundade MTN DEKOR med en tydlig vision: att erbjuda Olofström och Blekinge-regionen professionella fordonstjänster med en personlig touch och ett orubbligt fokus på kvalitet.
+                    </p>
+                    <p style="line-height: 1.9; color: var(--text-light); font-size: 1.05rem;">
+                        Varje projekt behandlas med samma omsorg och noggrannhet – oavsett om det gäller en komplett foliering, en stenskottsfilm eller en motoroptimering. Mertcan ser varje fordon som ett unikt projekt och varje kund som en partner i att skapa något extraordinärt.
+                    </p>
+                </div>
+
+                <!-- Quote -->
+                <div class="fade-in-section" style="background: rgba(212,175,55,0.08); border-radius: 12px; padding: 2.5rem; margin-bottom: 3rem; text-align: center; border: 1px solid rgba(212,175,55,0.25);">
+                    <p style="font-size: 1.25rem; line-height: 1.9; color: var(--text-light); font-style: italic; margin-bottom: 1.5rem;">
+                        "Varje fordon berättar en historia. Mitt mål är att hjälpa varje kund att berätta sin historia på bästa möjliga sätt – med precision, passion och stolthet i varje detalj."
+                    </p>
+                    <p style="color: var(--accent-primary); font-weight: bold; font-size: 1rem;">— Mertcan Okusluk, Grundare MTN DEKOR</p>
+                </div>
+
+                <!-- Values -->
+                <div class="fade-in-section services-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 3rem;">
+                    <div style="text-align: center; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid #2a2a2a;">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏆</div>
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Kvalitet</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Kompromisslös kvalitet i varje projekt</p>
+                    </div>
+                    <div style="text-align: center; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid #2a2a2a;">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">📍</div>
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Lokalt</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Stolt att serva Olofström &amp; Blekinge</p>
+                    </div>
+                    <div style="text-align: center; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid #2a2a2a;">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">❤️</div>
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Passion</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Äkta kärlek till bilar och design</p>
+                    </div>
+                    <div style="text-align: center; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid #2a2a2a;">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🤝</div>
+                        <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">Förtroende</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Ärlighet och transparens alltid</p>
+                    </div>
+                </div>
+
+                <div class="fade-in-section" style="text-align: center; margin-top: 1rem;">
+                    <button class="btn" onclick="switchTab('kontakt')" style="padding: 1rem 3rem; font-size: 1.1rem;">Kontakta Mertcan &rarr;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== KONTAKT ===== -->
+        <section id="kontakt" class="tab-content">
+            <h2 class="section-title fade-in">Kontakta Oss</h2>
+
+            <div style="max-width: 750px; margin: 0 auto; padding: 0 5% 5rem;">
+                <div class="fade-in-section" style="padding: 2.5rem; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid #2a2a2a;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 2rem; text-align: center; font-size: 1.4rem;">Vi är här för dig</h3>
+
+                    <div class="contact-row">
+                        <p class="contact-label">TELEFON</p>
+                        <p class="contact-value"><a href="tel:0720189160">0720&thinsp;18&thinsp;91&thinsp;60</a></p>
                     </div>
 
-                    <div style="margin-bottom: 2.5rem; text-align: center;">
-                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; font-weight: bold;">E-POST</p>
-                        <p style="font-size: 1.3rem; font-weight: bold;"><a href="mailto:Mtn_dekor@hotmail.com" style="color: var(--accent-primary); text-decoration: none;">Mtn_dekor@hotmail.com</a></p>
+                    <div class="contact-row">
+                        <p class="contact-label">E-POST</p>
+                        <p class="contact-value"><a href="mailto:Mtn_dekor@hotmail.com">Mtn_dekor@hotmail.com</a></p>
                     </div>
 
-                    <div style="margin-bottom: 2.5rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
-                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; text-transform: uppercase; font-weight: bold;">ADRESS</p>
-                        <p style="line-height: 1.8; font-size: 1rem;">
+                    <div class="contact-row" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                        <p class="contact-label">ADRESS</p>
+                        <p class="contact-value" style="line-height: 1.8;">
                             <strong>MTN DEKOR</strong><br>
                             Bladvägen 17<br>
-                            Olofström/Blekinge<br>
+                            Olofström / Blekinge<br>
                             293 42, Sverige
                         </p>
                     </div>
 
-                    <div style="margin-bottom: 2.5rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
-                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; text-transform: uppercase; font-weight: bold;">FÖLJ OSS</p>
-                        <div style="display: flex; justify-content: center; gap: 1.5rem;">
-                            <a href="https://www.facebook.com/p/Mtn-Dekor-61555332775951/?locale=sv_SE" target="_blank" style="color: var(--accent-primary); text-decoration: none; font-weight: bold;">Facebook</a>
-                            <a href="https://www.instagram.com/mtn.dekor/" target="_blank" style="color: var(--accent-primary); text-decoration: none; font-weight: bold;">Instagram</a>
+                    <div class="contact-row" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                        <p class="contact-label">FÖLJ OSS</p>
+                        <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                            <a href="https://www.facebook.com/p/Mtn-Dekor-61555332775951/?locale=sv_SE" target="_blank" rel="noopener" class="social-link">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 6px;"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                                Facebook
+                            </a>
+                            <a href="https://www.instagram.com/mtn.dekor/" target="_blank" rel="noopener" class="social-link">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                                Instagram
+                            </a>
                         </div>
                     </div>
 
-                    <div style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
-                        <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0; text-transform: uppercase; font-weight: bold;">VÄVPLATS</p>
-                        <p style="font-size: 1rem; margin-top: 0.5rem;">
-                            <a href="https://www.mtndekor.com" target="_blank" style="color: var(--accent-primary); text-decoration: none;">mtndekor.com</a>
-                        </p>
+                    <div class="contact-row" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                        <p class="contact-label">WEBBPLATS</p>
+                        <p class="contact-value"><a href="https://www.mtndekor.com" target="_blank" rel="noopener">mtndekor.com</a></p>
                     </div>
                 </div>
             </div>
         </section>
+
     </main>
 
+    <!-- ===== CART SIDEBAR ===== -->
     <div id="cart-sidebar" class="cart-sidebar">
         <div class="cart-header">
             <h2>Din Varukorg</h2>
             <span class="close-cart-btn" id="close-cart-btn">&times;</span>
         </div>
-        <div class="cart-items" id="cart-items">
-            </div>
+        <div class="cart-items" id="cart-items"></div>
         <div class="cart-footer">
             <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--text-muted);">
                 <span>Varor:</span>
@@ -224,6 +370,7 @@ I den nästa fliken kan ni se en rad utav lyckade resultat, vill du bli nästa k
         </div>
     </div>
 
+    <!-- ===== SWISH MODAL ===== -->
     <div id="swish-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
@@ -244,45 +391,30 @@ I den nästa fliken kan ni se en rad utav lyckade resultat, vill du bli nästa k
 
     <div id="cart-overlay" class="cart-overlay"></div>
 
+    <!-- ===== FOOTER ===== -->
     <footer style="border-top: 1px solid rgba(255,255,255,0.1); padding: 3rem 5%;">
         <div style="max-width: 1200px; margin: 0 auto;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-                <!-- Company Info -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
                 <div>
                     <h4 style="color: var(--accent-primary); margin-bottom: 1rem; font-size: 1rem; text-transform: uppercase;">MTN DEKOR</h4>
                     <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">Specialister inom Fordonsdesign och Optimeringstjänster</p>
-                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">Bladvägen 17, Olofström/Blekinge<br>293 42, Sverige</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">Bladvägen 17, Olofström / Blekinge<br>293 42, Sverige</p>
                 </div>
-                
-                <!-- Contact Info -->
                 <div>
                     <h4 style="color: var(--accent-primary); margin-bottom: 1rem; font-size: 1rem; text-transform: uppercase;">KONTAKT</h4>
-                    <p style="margin: 0.5rem 0; font-size: 0.9rem;">
-                        <a href="tel:0720189160" style="color: var(--text-light); text-decoration: none;">Tel: 0720189160</a>
-                    </p>
-                    <p style="margin: 0.5rem 0; font-size: 0.9rem;">
-                        <a href="mailto:Mtn_dekor@hotmail.com" style="color: var(--text-light); text-decoration: none;">Email: Mtn_dekor@hotmail.com</a>
-                    </p>
-                    <p style="margin: 0.5rem 0; font-size: 0.9rem;">
-                        <a href="https://www.mtndekor.com" target="_blank" style="color: var(--text-light); text-decoration: none;">www.mtndekor.com</a>
-                    </p>
+                    <p style="margin: 0.5rem 0; font-size: 0.9rem;"><a href="tel:0720189160" style="color: var(--text-light); text-decoration: none;">Tel: 0720&thinsp;18&thinsp;91&thinsp;60</a></p>
+                    <p style="margin: 0.5rem 0; font-size: 0.9rem;"><a href="mailto:Mtn_dekor@hotmail.com" style="color: var(--text-light); text-decoration: none;">Mtn_dekor@hotmail.com</a></p>
+                    <p style="margin: 0.5rem 0; font-size: 0.9rem;"><a href="https://www.mtndekor.com" target="_blank" rel="noopener" style="color: var(--text-light); text-decoration: none;">www.mtndekor.com</a></p>
                 </div>
-
-                <!-- Social Media -->
                 <div>
                     <h4 style="color: var(--accent-primary); margin-bottom: 1rem; font-size: 1rem; text-transform: uppercase;">FÖLJ OSS</h4>
-                    <p style="margin: 0.5rem 0; font-size: 0.9rem;">
-                        <a href="https://www.facebook.com/p/Mtn-Dekor-61555332775951/?locale=sv_SE" target="_blank" style="color: var(--text-light); text-decoration: none;">Facebook</a>
-                    </p>
-                    <p style="margin: 0.5rem 0; font-size: 0.9rem;">
-                        <a href="https://www.instagram.com/mtn.dekor/" target="_blank" style="color: var(--text-light); text-decoration: none;">Instagram</a>
-                    </p>
+                    <p style="margin: 0.5rem 0; font-size: 0.9rem;"><a href="https://www.facebook.com/p/Mtn-Dekor-61555332775951/?locale=sv_SE" target="_blank" rel="noopener" style="color: var(--text-light); text-decoration: none;">Facebook</a></p>
+                    <p style="margin: 0.5rem 0; font-size: 0.9rem;"><a href="https://www.instagram.com/mtn.dekor/" target="_blank" rel="noopener" style="color: var(--text-light); text-decoration: none;">Instagram</a></p>
                 </div>
             </div>
-
             <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                 <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">&copy; 2026 MTN DEKOR. Alla rättigheter förbehållna.</p>
-                <a href="/admin.html" style="color: var(--accent-primary); text-decoration: none; font-weight: bold; font-size: 0.9rem;">Admin Panel →</a>
+                <a href="/admin.html" style="color: var(--accent-primary); text-decoration: none; font-weight: bold; font-size: 0.9rem;">Admin Panel &rarr;</a>
             </div>
         </div>
     </footer>
