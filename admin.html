@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MTN DEKOR | Admin Panel</title>
     <link rel="stylesheet" href="/style.css">
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
         .admin-layout { padding: 4rem 5%; max-width: 1200px; margin: 0 auto; display: none; }
         .admin-section { background-color: var(--bg-card); padding: 2rem; border-radius: 8px; border: 1px solid #333; margin-bottom: 3rem; }
@@ -163,25 +162,11 @@
             </div>
         </section>
 
-        <section class="admin-section">
-            <h2 style="color:var(--accent-primary);">Hantera Egna Sidor / Flikar</h2>
-            <div class="contact-form" style="margin-top: 1rem; border-bottom: 1px solid #333; padding-bottom: 2rem;">
-                <div class="form-group"><label>Flikens namn</label><input type="text" id="page-title"></div>
-                <div class="form-group"><label>Innehåll</label><div id="editor-container" style="height: 300px; background: white; color: black;"></div></div>
-                <button id="add-page-btn" class="btn" style="margin-top: 1rem;">Publicera Flik</button>
-            </div>
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead><tr><th>Titel</th><th>Åtgärd</th></tr></thead>
-                    <tbody id="pages-table-body"></tbody>
-                </table>
-            </div>
-        </section>
+
 
 
     </main>
 
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
         // --- 1. SÄKER INLOGGNING ---
         async function checkLogin() {
@@ -205,7 +190,6 @@
             loadProducts();
             loadProjects();
             loadHeroSlides();
-            loadPages();
             loadShippingRates();
             loadTestimonials();
         }
@@ -465,38 +449,8 @@
             }
         }
 
-        // --- EGNA SIDOR (QUILL CMS) ---
-        let quill = new Quill('#editor-container', {
-            theme: 'snow',
-            modules: { toolbar: [ [{ 'header': [1, 2, 3, false] }], ['bold', 'italic', 'underline'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['clean'] ] }
-        });
 
-        async function loadPages() {
-            const res = await fetch('/api/pages');
-            const pages = await res.json();
-            const tbody = document.getElementById('pages-table-body');
-            tbody.innerHTML = '';
-            pages.forEach(p => {
-                tbody.innerHTML += `<tr><td><strong>${p.title}</strong></td><td><button class="delete-btn" onclick="deletePage(${p.id})">Ta bort</button></td></tr>`;
-            });
-        }
 
-        document.getElementById('add-page-btn').addEventListener('click', async () => {
-            const title = document.getElementById('page-title').value;
-            const content = quill.root.innerHTML; 
-            if(!title || quill.getText().trim().length === 0) return alert("Fyll i fälten!");
-            await fetch('/api/pages', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ title, content }) });
-            document.getElementById('page-title').value = '';
-            quill.setContents([]);
-            loadPages();
-        });
-
-        async function deletePage(id) {
-            if(confirm('Vill du ta bort denna flik?')) {
-                await fetch('/api/pages', { method: 'DELETE', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ id }) });
-                loadPages();
-            }
-        }
 
 
     </script>
