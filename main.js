@@ -10,49 +10,59 @@ if (hamburger) {
 }
 
 // --- Flik-navigering (Tabs) Logik ---
+function switchTab(tabId) {
+    // Hide all tabs
+    const allTabs = document.querySelectorAll('.tab-content');
+    allTabs.forEach(tab => tab.classList.remove('active-tab'));
+    
+    // Remove active class from all nav tabs
+    const allNavTabs = document.querySelectorAll('.nav-tab');
+    allNavTabs.forEach(tab => tab.classList.remove('active'));
+    
+    // Show the selected tab
+    const selectedTab = document.getElementById(tabId);
+    if (selectedTab) {
+        selectedTab.classList.add('active-tab');
+    }
+    
+    // Mark the nav tab as active
+    const selectedNavTab = document.querySelector(`.nav-tab[data-tab="${tabId}"]`);
+    if (selectedNavTab) {
+        selectedNavTab.classList.add('active');
+    }
+    
+    // Close mobile menu
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    if (hamburger && navLinks) {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+    }
+    
+    // Update URL
+    window.history.pushState(null, null, `#${tabId}`);
+}
+
 function bindTabs() {
     const tabs = document.querySelectorAll('.nav-tab');
-
     tabs.forEach(tab => {
         tab.addEventListener('click', (e) => {
-            const targetId = tab.getAttribute('data-tab');
-            if (!targetId) return;
-
             e.preventDefault();
-            
-            // Uppdaterar URL:en så att direktlänkar (t.ex. /#butik) fungerar
-            history.pushState(null, null, `#${targetId}`);
-            
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
-            
-            tab.classList.add('active');
-            const targetSection = document.getElementById(targetId);
-            if (targetSection) targetSection.classList.add('active-tab');
-
-            const hamburger = document.querySelector('.hamburger');
-            const navLinks = document.querySelector('.nav-links');
-            if (hamburger) {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
+            const targetId = tab.getAttribute('data-tab');
+            if (targetId) {
+                switchTab(targetId);
             }
         });
     });
 }
 
-// Kollar om adressen innehåller t.ex. #butik och öppnar fliken
-function checkHashRoute() {
+// Handle browser back/forward buttons
+window.addEventListener('popstate', () => {
     const hash = window.location.hash.replace('#', '');
-    if (hash) {
-        const targetTab = document.querySelector(`.nav-tab[data-tab="${hash}"]`);
-        if (targetTab) {
-            targetTab.click();
-        }
+    if (hash && document.getElementById(hash)) {
+        switchTab(hash);
     }
-}
-
-// Lyssna på webbläsarens "Bakåt/Framåt"-knappar
-window.addEventListener('popstate', checkHashRoute);
+});
 
 // --- Kundvagn & Frakt Logik ---
 const modal = document.getElementById('swish-modal');
