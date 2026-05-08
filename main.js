@@ -10,36 +10,35 @@ if (hamburger) {
 }
 
 // --- Flik-navigering (Tabs) Logik ---
-const tabs = document.querySelectorAll('.nav-tab');
-const tabContents = document.querySelectorAll('.tab-content');
+function bindTabs() {
+    const tabs = document.querySelectorAll('.nav-tab');
+    const tabContents = document.querySelectorAll('.tab-content');
 
-tabs.forEach(tab => {
-    tab.addEventListener('click', (e) => {
-        const targetTab = tab.getAttribute('data-tab');
-        
-        // Om det är en länk till en annan sida (som admin), hindra inte standardbeteendet
-        if (!targetTab) return;
+    tabs.forEach(tab => {
+        // Vi klonar för att rensa gamla händelser om vi kör funktionen flera gånger
+        const newTab = tab.cloneNode(true);
+        tab.parentNode.replaceChild(newTab, tab);
 
-        e.preventDefault();
-        
-        // Ta bort aktiv status från alla flikar och sektioner
-        tabs.forEach(t => t.classList.remove('active'));
-        tabContents.forEach(c => c.classList.remove('active-tab'));
-        
-        // Aktivera vald flik och sektion
-        tab.classList.add('active');
-        const targetSection = document.getElementById(targetTab);
-        if (targetSection) {
-            targetSection.classList.add('active-tab');
-        }
+        newTab.addEventListener('click', (e) => {
+            const targetId = newTab.getAttribute('data-tab');
+            if (!targetId) return;
 
-        // Stäng mobilmenyn
-        if (hamburger) {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
-        }
+            e.preventDefault();
+            
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
+            
+            newTab.classList.add('active');
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) targetSection.classList.add('active-tab');
+
+            if (hamburger) {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
+        });
     });
-});
+}
 
 // --- Kundvagn (Cart) & Modal Logik ---
 const modal = document.getElementById('swish-modal');
@@ -101,16 +100,13 @@ function flyToCart(buttonEl, imageUrl) {
     const cartIcon = document.getElementById('open-cart-btn');
     if (!cartIcon) return;
 
-    // Räkna ut var knappen och kundvagnsikonen är på skärmen
     const btnRect = buttonEl.getBoundingClientRect();
     const cartRect = cartIcon.getBoundingClientRect();
 
-    // Skapa en flygande kopia av bilden
     const flyingImg = document.createElement('img');
     flyingImg.src = imageUrl;
     flyingImg.className = 'flying-img';
     
-    // Startposition (Mitt på knappen)
     flyingImg.style.width = '60px';
     flyingImg.style.height = '60px';
     flyingImg.style.left = `${btnRect.left + btnRect.width / 2 - 30}px`;
@@ -118,17 +114,14 @@ function flyToCart(buttonEl, imageUrl) {
     
     document.body.appendChild(flyingImg);
 
-    // Tvinga webbläsaren att registrera startpositionen innan vi flyttar den
     void flyingImg.offsetWidth;
 
-    // Slutposition (In i kundvagnen)
     flyingImg.style.left = `${cartRect.left + cartRect.width / 2 - 10}px`;
     flyingImg.style.top = `${cartRect.top + cartRect.height / 2 - 10}px`;
     flyingImg.style.width = '20px';
     flyingImg.style.height = '20px';
     flyingImg.style.opacity = '0.1';
 
-    // Ta bort bilden när animationen är klar och "studsa" kundvagnen
     setTimeout(() => {
         flyingImg.remove();
         cartIcon.classList.add('cart-bounce');
@@ -152,7 +145,6 @@ if (checkoutBtn) {
     checkoutBtn.addEventListener('click', async () => {
         if (cart.length === 0) return alert("Varukorgen är tom!");
 
-        // Visuell feedback till kunden medan kassan laddas
         checkoutBtn.textContent = 'Laddar säker kassa...';
         checkoutBtn.disabled = true;
 
@@ -166,7 +158,6 @@ if (checkoutBtn) {
             const data = await response.json();
 
             if (response.ok && data.url) {
-                // Skicka kunden till Stripes betalsida
                 window.location.href = data.url;
             } else {
                 alert("Kunde inte starta betalningen: " + (data.error || "Okänt fel"));
@@ -196,7 +187,6 @@ async function fetchProducts() {
         products.forEach(prod => {
             const card = document.createElement('div');
             card.className = 'service-card fade-in appear';
-            // Rensar namn ifall produkten innehåller ett citattecken (t.ex. "20' fälgar")
             const safeName = prod.name ? prod.name.replace(/'/g, "\\'") : '';
             card.innerHTML = `
                 <img src="${prod.image_url}" alt="${prod.name}" style="width:100%; height:250px; object-fit:cover; border-radius:8px; margin-bottom:1rem;">
@@ -240,13 +230,77 @@ async function fetchProjects() {
     }
 }
 
+// --- Hämta Bildspel ---
+async function fetchHeroSlides() {
+    const container = document.getElementById('hero-slides-container');
+    if (!container) return;
+
+    try {
+        const res = await fetch('/api/hero');
+        if (!res.ok) return;
+        const slides = await res.json();
+
+        if (slides.length === 0) {
+            container.innerHTML = `<div class="hero-slide active" style="background-color: #121212;"></div>`;
+            return;
+        }
+
+        container.innerHTML = slides.map((slide, index) => `
+            <div class="hero-slide ${index === 0 ? 'active' : ''}" style="background-image: url('${slide.image_url}');"></div>
+        `).join('');
+
+        if (slides.length > 1) {
+            let currentIndex = 0;
+            const slideElements = container.querySelectorAll('.hero-slide');
+            setInterval(() => {
+                slideElements[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % slideElements.length;
+                slideElements[currentIndex].classList.add('active');
+            }, 5000); 
+        }
+    } catch (err) {
+        console.error("Kunde inte ladda bildspel:", err);
+    }
+}
+
+// --- Hämta Egna Sidor (CMS) ---
+async function fetchCustomPages() {
+    const container = document.getElementById('dynamic-pages-container');
+    const navLinksList = document.querySelector('.nav-links');
+    if (!container || !navLinksList) return;
+
+    try {
+        const res = await fetch('/api/pages');
+        if (!res.ok) return;
+        const pages = await res.json();
+
+        pages.forEach(page => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="#${page.slug}" class="nav-tab" data-tab="${page.slug}">${page.title}</a>`;
+            navLinksList.appendChild(li);
+
+            const section = document.createElement('section');
+            section.id = page.slug;
+            section.className = 'tab-content';
+            section.innerHTML = `
+                <h2 class="section-title">${page.title}</h2>
+                <div class="custom-content" style="max-width:900px; margin:0 auto; padding: 0 1rem; line-height:1.7;">
+                    ${page.content}
+                </div>
+            `;
+            container.appendChild(section);
+        });
+
+        bindTabs(); 
+    } catch (err) { console.error(err); }
+}
+
 // Kör vid sidladdning
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Kolla om kunden kommer tillbaka från Stripe ---
+    
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('success')) {
         alert("Tack för din beställning! Betalningen är genomförd.");
-        // Rensa adressfältet från ?success=true för att hålla det snyggt
         window.history.replaceState(null, '', window.location.pathname);
     }
     if (urlParams.get('canceled')) {
@@ -254,6 +308,10 @@ document.addEventListener('DOMContentLoaded', () => {
         window.history.replaceState(null, '', window.location.pathname);
     }
 
+    // Ladda in flikarna och hämta allt dynamiskt innehåll
+    bindTabs(); 
+    fetchHeroSlides();
+    fetchCustomPages();
     fetchProducts();
     fetchProjects();
     
@@ -277,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const contactForm = document.getElementById('contact-form');
 if (contactForm) {
     contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Hindrar sidan från att laddas om
+        e.preventDefault(); 
         
         const fornamn = document.getElementById('fornamn').value;
         const efternamn = document.getElementById('efternamn').value;
@@ -285,7 +343,6 @@ if (contactForm) {
         const meddelande = document.getElementById('meddelande').value;
         const submitBtn = contactForm.querySelector('button[type="submit"]');
 
-        // Ge kunden visuell feedback att något händer
         submitBtn.textContent = 'Skickar...';
         submitBtn.disabled = true;
 
@@ -298,14 +355,13 @@ if (contactForm) {
 
             if (res.ok) {
                 alert('Tack! Ditt meddelande har skickats till oss.');
-                contactForm.reset(); // Tömmer formuläret
+                contactForm.reset(); 
             } else {
                 alert('Något gick fel när meddelandet skulle skickas. Försök igen.');
             }
         } catch (err) {
             alert('Kunde inte ansluta till servern.');
         } finally {
-            // Återställ knappen
             submitBtn.textContent = 'Skicka Meddelande';
             submitBtn.disabled = false;
         }
